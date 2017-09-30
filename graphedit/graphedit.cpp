@@ -219,13 +219,20 @@ void GraphEdit::deleteKey()
         {
             removed[selected[0]] = true;
 
-            for (int i = 0; i < edges.length(); i++)
+            int i = 0;
+            while (i < edges.length())
             {
+                qDebug() << "1: " << edges[i].node1 << "\t" << edges[i].node2;
+
                 if (edges[i].node1 == selected[0] ||
                     edges[i].node2 == selected[0])
                 {
-                    qDebug() << "1: " << edges[i].node1 << "\t" << edges[i].node2;
+                    qDebug() << "removed";
                     edges.remove(i);
+                }
+                else
+                {
+                    i++;
                 }
             }
 
@@ -233,7 +240,8 @@ void GraphEdit::deleteKey()
         }
         else
         {
-            for (int i = 0; i < edges.length(); i++)
+            int i = 0;
+            while (i < edges.length())
             {
                 if ((edges[i].node1 == selected[0] &&
                     edges[i].node2 == selected[1]) ||
@@ -242,6 +250,10 @@ void GraphEdit::deleteKey()
                 {
                     qDebug() << "2: " << edges[i].node1 << "\t" << edges[i].node2;
                     edges.remove(i);
+                }
+                else
+                {
+                    i++;
                 }
             }
         }
