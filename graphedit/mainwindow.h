@@ -18,6 +18,12 @@ public:
 private slots:
     void on_pushButton_clicked();
 
+    void on_widget_twoNodesSelected(int , int );
+
+    void on_widget_dblSelectionLoss();
+
+    void on_pushButton_2_clicked();
+
 private:
     Ui::MainWindow *ui;
 };
