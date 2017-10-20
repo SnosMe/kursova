@@ -5,6 +5,8 @@
 #include <QMouseEvent>
 #include "graphedit.h"
 
+const float LINE_WIDTH = 0.05;
+
 static int dist(int x, int y)
 {
     return (int) sqrt(x*x+y*y);
@@ -12,10 +14,8 @@ static int dist(int x, int y)
 
 GraphEdit::GraphEdit(QWidget *parent) : QWidget(parent)
 {
-    selected[0] = -1;
-    selected[1] = -1;
-    multi_select = false;
-    grab = false;
+    selected = -1;
+    mode     = MODE_NONE;
     setFocusPolicy(Qt::StrongFocus);
 }
 
@@ -40,18 +40,42 @@ void GraphEdit::paintEvent(QPaintEvent*)
         int x2 = nodes[nd2].x*w;
         int y2 = nodes[nd2].y*h;
 
+        if (i == selected && mode == MODE_SELEDGE)
+        {
+            p.setPen(QPen(QColor(255, 0, 0)));
+        }
+        else if (hl_edge[i])
+        {
+            p.setPen(QPen(QColor(0, 255, 0)));
+        }
+        else
+        {
+            p.setPen(QPen(QColor(0, 0, 0)));
+        }
+
         p.drawLine(x1, y1, x2, y2);
 
         p.drawText((x1+x2)/2, (y1+y2)/2, QVariant(edges[i].w).toString());
+    }
+
+    p.setPen(QPen(QColor(0, 0, 0)));
+
+    if (mode == MODE_NEWEDGE)
+    {
+        p.drawLine(from, to);
     }
 
     for (int i = 0; i < nodes.length(); i++)
     {
         if (!removed[i])
         {
-            if (i == selected[0] || i == selected[1])
+            if (i == selected && mode == MODE_MOVE)
             {
                 p.setBrush(QBrush(QColor(190, 190, 255)));
+            }
+            else if (hl_node[i])
+            {
+                p.setBrush(QBrush(QColor(0, 255, 0)));
             }
             else
             {
@@ -67,105 +91,107 @@ void GraphEdit::paintEvent(QPaintEvent*)
     }
 }
 
-void GraphEdit::mousePressEvent(QMouseEvent* event)
+void GraphEdit::mousePressEvent(QMouseEvent* e)
 {
-    int x, y;
+    int x = e->x();
+    int y = e->y();
 
-    x = event->x();
-    y = event->y();
+    int id = getNodeAt(x, y);
 
-    int w, h, r;
-    QSize sz = this->size();
-
-    w = sz.width();
-    h = sz.height();
-    r = std::min(w, h)*0.1;
-
-    bool found = false;
-
-    for (int i = 0; i < nodes.length(); i++)
+    if (id != -1)
     {
-        int d = dist(nodes[i].x*w - x, nodes[i].y*h - y);
-        if (d <= r)
-        {
-            if (!multi_select)
-            {
-                selected[0] = i;
-                if (selected[1] != -1) emit dblSelectionLoss();
-                selected[1] = -1;
-                // emit nodeSelected(i);
-                found = true;
-                break;
-            }
-            else
-            {
-                std::swap(selected[0], selected[1]);
-                selected[0] = i;
+        selected = id;
+        from.setX(x);
+        from.setY(y);
+        to.setX(x);
+        to.setY(y);
 
-                if (selected[1] != -1) emit twoNodesSelected(selected[0], selected[1]);
-                found = true;
-                break;
-            }
+        if (mode == MODE_NONE)
+        {
+            mode = MODE_NEWEDGE;
+            qDebug() << "MODE_NEWEDGE";
+        }
+        else if (mode == MODE_SELEDGE)
+        {
+            emit edgeSelectionLoss();
+            mode = MODE_NEWEDGE;
+            qDebug() << "MODE_NEWEDGE";
+        }
+
+    }
+    else
+    {
+        id = getEdgeAt(x, y);
+
+        qDebug() << "id = " << id;
+
+        if (id != -1)
+        {
+            selected = id;
+            mode = MODE_SELEDGE;
+            emit edgeSelected(id);
+            qDebug() << "MODE_SELEDGE";
+        }
+        else
+        {
+            selected = -1;
+            if (mode == MODE_SELEDGE) emit edgeSelectionLoss();
+            mode = MODE_NONE;
+            qDebug() << "MODE_NONE";
         }
     }
-
-    if (!found)
-    {
-        if (selected[0] != -1 && selected[1] != -1) emit dblSelectionLoss();
-
-        selected[0] = -1;
-        selected[1] = -1;
-    }
-
-    grab = true;
 
     update();
 }
 
 void GraphEdit::mouseReleaseEvent(QMouseEvent* e)
 {
-    grab = false;
+    if (mode == MODE_NEWEDGE)
+    {
+        int id = getNodeAt(e->x(), e->y());
+        if (id != -1)
+        {
+            if (id != selected && from != to)
+            {
+                AddEdge(selected, id, 1);
+            }
+        }
 
-    // update();
+        mode = MODE_NONE;
+        qDebug() << "MODE_NONE";
+        update();
+    }
 }
 
 void GraphEdit::mouseMoveEvent(QMouseEvent* e)
 {
-    if (grab && selected[0] != -1)
+    if (mode == MODE_NEWEDGE)
     {
-        float w, h;
-        QSize sz = this->size();
+        to.setX(e->x());
+        to.setY(e->y());
 
-        w = sz.width();
-        h = sz.height();
-
-        float x = e->x()/w;
-        float y = e->y()/h;
-
-        int id = selected[0];
-
-        if (x >= 0.0 && x <= 1.0 &&
-                y >= 0.0 && y <= 1.0)
-        {
-            nodes[id].x = x;
-            nodes[id].y = y;
-
-            update();
-        }
+        update();
     }
-}
-
-void GraphEdit::keyPressEvent(QKeyEvent* e)
-{
-    //qDebug() << "keyPressEvent";
-
-    e->accept();
-
-    switch (e->key())
+    else if (mode == MODE_MOVE)
     {
-    case Qt::Key_Control:
-        multi_select = true;
-        break;
+        if (selected != -1)
+        {
+            float w, h;
+            QSize sz = this->size();
+
+            w = sz.width();
+            h = sz.height();
+            int x = e->x();
+            int y = e->y();
+
+            if (x >= 0 && x <= w && y >= 0 && y <= w)
+            {
+                nodes[selected].x = e->x()/w;
+                nodes[selected].y = e->y()/h;
+
+                update();
+            }
+        }
     }
 }
 
@@ -173,34 +199,52 @@ void GraphEdit::keyReleaseEvent(QKeyEvent* e)
 {
     e->accept();
 
-    if (e->key() == Qt::Key_Control)
+    if (e->key() == Qt::Key_Delete)
     {
-        multi_select = false;
-    }
-    else if (e->key() == Qt::Key_Delete)
-    {
-        if (selected[0] != -1)
+        if (selected != -1)
         {
-            if (selected[1] == -1)
+            if (mode == MODE_MOVE)
             {
-                RemoveNode(selected[0]);
-                selected[0] = -1;
+                RemoveNode(selected);
+                selected = -1;
+                mode = MODE_NONE;
             }
-            else
+            else if(mode == MODE_SELEDGE)
             {
-                RemoveEdge(selected[0], selected[1]);
+                RemoveEdge(selected);
+                emit edgeSelectionLoss();
+                selected = -1;
+                mode = MODE_NONE;
             }
         }
         update();
     }
-    else if (e->key() == Qt::Key_Insert)
+}
+
+void GraphEdit::mouseDoubleClickEvent(QMouseEvent* e)
+{
+    int x = e->x();
+    int y = e->y();
+
+    int id = getNodeAt(x, y);
+
+    if (id != -1)
     {
-        if (selected[0] != -1 && selected[1] != -1)
-        {
-            AddEdge(selected[0], selected[1], 1);
-        }
-        update();
+        selected = id;
+
+        if (mode == MODE_SELEDGE) emit edgeSelectionLoss();
+        mode = MODE_MOVE;
+
+        qDebug() << "MODE_MOVE";
     }
+    else
+    {
+        selected = -1;
+        mode = MODE_NONE;
+        qDebug() << "MODE_NONE";
+    }
+
+    update();
 }
 
 int GraphEdit::AddNode(float x, float y, int w)
@@ -212,6 +256,7 @@ int GraphEdit::AddNode(float x, float y, int w)
 
     removed.append(false);
     nodes.append(nd);
+    hl_node.append(false);
 
     update();
 
@@ -242,7 +287,19 @@ int GraphEdit::AddNode(int x, int y)
 void GraphEdit::AddEdge(int a, int b, int w)
 {
     qDebug() << "AddEdge" << a << " " << b << " " << w;
-    if (a != b)
+
+    bool found = false;
+    for (int i = 0; i < edges.length(); i++)
+    {
+        if ((edges[i].node1 == a && edges[i].node2 == b) ||
+            (edges[i].node1 == b && edges[i].node2 == a))
+        {
+            found = true;
+            break;
+        }
+    }
+
+    if (a != b && !found)
     {
         GraphEdge ed;
         ed.node1 = a;
@@ -250,6 +307,7 @@ void GraphEdit::AddEdge(int a, int b, int w)
         ed.w     = w;
 
         edges.append(ed);
+        hl_edge.append(false);
         update();
     }
 }
@@ -309,14 +367,140 @@ bool GraphEdit::RemoveEdge(int a, int b)
     return found;
 }
 
-int GraphEdit::GetSelected(int i)
+bool GraphEdit::RemoveEdge(int i)
 {
-    if (i == 0 || i == 1)
+   edges.remove(i);
+
+    update();
+
+    return true;
+}
+
+int GraphEdit::GetSelectedEdge()
+{
+    if (mode == MODE_SELEDGE) return selected;
+    else return -1;
+}
+
+void GraphEdit::SetEdgeWeight(int id, int w)
+{
+    if (id >= 0 && id < edges.length())
     {
-        return selected[i];
+        edges[id].w = w;
     }
-    else
+}
+
+int** GraphEdit::GetMatrix()
+{
+    int** ret = new int*[nodes.length()];
+
+    for (int i = 0; i < nodes.length(); i++)
     {
-        return -1;
+        ret[i] = new int[nodes.length()];
+
+        for (int j = 0; j < nodes.length(); j++)
+        {
+            ret[i][j] = 0;
+        }
     }
+
+    for (int i = 0; i < edges.length(); i++)
+    {
+        int v1 = edges[i].node1;
+        int v2 = edges[i].node2;
+
+        ret[v1][v2] = edges[i].w;
+        ret[v2][v1] = edges[i].w;
+    }
+
+    return ret;
+}
+
+void GraphEdit::HighlightEdge(int a, int b, bool v)
+{
+    for (int i = 0; i < edges.length(); i++)
+    {
+        if ((edges[i].node1 == a &&
+             edges[i].node2 == b) ||
+                (edges[i].node1 == b &&
+                 edges[i].node2 == a))
+        {
+            hl_edge[i] = v;
+            break;
+        }
+    }
+
+    update();
+}
+
+void GraphEdit::HighlightNode(int i, bool v)
+{
+    if (i >= 0 && i < nodes.length()) hl_node[i] = v;
+}
+
+int GraphEdit::GetSize()
+{
+    return nodes.length();
+}
+
+
+int GraphEdit::getNodeAt(int x, int y)
+{
+    int w, h, r;
+    QSize sz = this->size();
+
+    w = sz.width();
+    h = sz.height();
+    r = std::min(w, h)*0.1;
+
+    for (int i = 0; i < nodes.length(); i++)
+    {
+        int d = dist(nodes[i].x*w - x, nodes[i].y*h - y);
+        if (d <= r)
+        {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
+int GraphEdit::getEdgeAt(int x, int y)
+{
+
+    float w, h;
+    QSize sz = this->size();
+
+    w = sz.width();
+    h = sz.height();
+
+    float rx = x/w;
+    float ry = y/h;
+
+    for (int i = 0; i < edges.length(); i++)
+    {
+        int v1 = edges[i].node1;
+        int v2 = edges[i].node2;
+
+        float x1 = nodes[v1].x;
+        float y1 = nodes[v1].y;
+        float x2 = nodes[v2].x;
+        float y2 = nodes[v2].y;
+
+        qDebug() << x1 << rx << x2 << y1 << ry << y2;
+
+        if (rx <= std::max(x1, x2)+LINE_WIDTH && rx >= std::min(x1, x2)-LINE_WIDTH &&
+            ry <= std::max(y1, y2)+LINE_WIDTH && ry >= std::min(y1, y2)-LINE_WIDTH)
+        {
+            float a = fabs((y2-y1)*rx-(x2-x1)*ry+x2*y1-y2*x1);
+            float b = sqrt(pow(x2-x1, 2)+pow(y2-y1, 2));
+            float d = a/b;
+
+            qDebug() << "d = " << d;
+
+            if (d <= LINE_WIDTH) return i;
+        }
+    }
+
+    return -1;
 }

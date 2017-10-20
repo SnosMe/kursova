@@ -18,7 +18,7 @@
     <property name="geometry">
      <rect>
       <x>140</x>
-      <y>340</y>
+      <y>310</y>
       <width>211</width>
       <height>27</height>
      </rect>
@@ -41,23 +41,36 @@
     <property name="geometry">
      <rect>
       <x>140</x>
-      <y>310</y>
+      <y>340</y>
       <width>211</width>
       <height>27</height>
      </rect>
     </property>
     <property name="text">
-     <string>Добавить ребро</string>
+     <string>Установить вес</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="lineEdit">
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>310</y>
+      <y>340</y>
       <width>113</width>
       <height>23</height>
      </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_3">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>380</y>
+      <width>211</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>PushButton</string>
     </property>
    </widget>
   </widget>
@@ -89,8 +102,8 @@
    <header>graphedit.h</header>
    <container>1</container>
    <slots>
-    <signal>twoNodesSelected(int,int)</signal>
-    <signal>dblSelectionLoss()</signal>
+    <signal>edgeSelected(int)</signal>
+    <signal>edgeSelectionLoss()</signal>
    </slots>
   </customwidget>
  </customwidgets>

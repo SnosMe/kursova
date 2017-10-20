@@ -31,20 +31,38 @@ void MainWindow::on_pushButton_clicked()
    // ui->widget->update();
 }
 
-void MainWindow::on_widget_twoNodesSelected(int, int)
+/*void MainWindow::on_widget_twoNodesSelected(int, int)
 {
     ui->pushButton_2->setEnabled(true);
 }
 
 void MainWindow::on_widget_dblSelectionLoss()
 {
-    ui->pushButton_2->setEnabled(false);
-}
+
+}*/
 
 void MainWindow::on_pushButton_2_clicked()
 {
-    int w = QVariant(ui->lineEdit->text()).toUInt();
-    int a = ui->widget->GetSelected(0);
-    int b = ui->widget->GetSelected(1);
-    ui->widget->AddEdge(a, b, w);
+    int index = ui->widget->GetSelectedEdge();
+    int w  = ui->lineEdit->text().toInt();
+    ui->widget->SetEdgeWeight(index, w);
+    ui->lineEdit->setText(QString(""));
+    ui->widget->update();
+}
+
+void MainWindow::on_widget_edgeSelected(int id)
+{
+    ui->pushButton_2->setEnabled(true);
+}
+
+void MainWindow::on_widget_edgeSelectionLoss()
+{
+    ui->pushButton_2->setEnabled(false);
+}
+
+void MainWindow::on_pushButton_3_clicked()
+{
+    int sz = ui->widget->GetSize();
+    ui->widget->HighlightNode(sz-1);
+    ui->widget->update();
 }

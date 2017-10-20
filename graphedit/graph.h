@@ -3,9 +3,9 @@
 
 struct GraphNode
 {
-    float  x;
-    float  y;
-    float  w;
+    float x;
+    float y;
+    int   w;
 };
 
 struct GraphEdge
