@@ -33,6 +33,8 @@ public:
     void HighlightEdge(int a, int b, bool v = true); // подсветить ребро
     void HighlightNode(int i, bool v = true); // подсветить вершину
     int GetSize(); // возвращает количество вершин
+    QVector<GraphEdge> GetEdges();
+    QVector<GraphNode> GetNodes();
 
 signals:
     void edgeSelected(int);

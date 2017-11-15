@@ -504,3 +504,13 @@ int GraphEdit::getEdgeAt(int x, int y)
 
     return -1;
 }
+
+QVector<GraphEdge> GraphEdit::GetEdges()
+{
+    return edges;
+}
+
+QVector<GraphNode> GraphEdit::GetNodes()
+{
+    return nodes;
+}
