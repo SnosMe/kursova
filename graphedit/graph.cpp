@@ -117,6 +117,34 @@ int Graph::GetNodeIndexByID(int id)
     return -1;
 }
 
+QVector<GraphEdge> Graph::GetIncidentEdges(int id)
+{
+    QVector<GraphEdge> ret;
+
+    for (int i = 0; i < edges.length(); i++)
+    {
+        if (edges[i].node1 == id || edges[i].node2 == id)
+        {
+            ret.push_back(edges[i]);
+        }
+    }
+
+    return ret;
+}
+
+GraphNode& Graph::GetNodeByID(int id)
+{
+    for (int i = 0; i < nodes.length(); i++)
+    {
+        if (nodes[i].id == id)
+        {
+            return nodes[i];
+        }
+    }
+
+    return nodes[0]; // исправить
+}
+
 void Graph::printNodes()
 {
     for (int i = 0; i < nodes.length(); i++)

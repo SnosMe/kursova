@@ -1,3 +1,4 @@
+#include <QStack>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -62,7 +63,54 @@ void MainWindow::on_widget_edgeSelectionLoss()
 
 void MainWindow::on_pushButton_3_clicked()
 {
-   /* int sz = ui->widget->GetSize();
-    ui->widget->HighlightNode(sz-1);*/
+   Graph gr = ui->widget->GetGraph();
+   QStack<int> st;
+
+   st.push(1);
+
+   states.clear();
+
+    while(!st.isEmpty())
+    {
+        int cur = st.pop();
+        QVector<GraphEdge> inc = gr.GetIncidentEdges(cur);
+        for (int i = 0; i < inc.length(); i++)
+        {
+            if (inc[i].node1 != cur && !gr.GetNodeByID(inc[i].node1).colored)
+            {
+                st.push(inc[i].node1);
+            }
+            else if (inc[i].node2 != cur && !gr.GetNodeByID(inc[i].node2).colored)
+            {
+                st.push(inc[i].node2);
+            }
+        }
+
+        gr.GetNodeByID(cur).colored = true;
+
+        states.push_back(gr);
+    }
+
+    cur_st = 0;
+    ui->widget->SetGraph(states[0]);
+
     ui->widget->update();
+}
+
+void MainWindow::on_pushButton_4_clicked()
+{
+    if (cur_st > 0)
+    {
+        cur_st--;
+        ui->widget->SetGraph(states[cur_st]);
+    }
+}
+
+void MainWindow::on_pushButton_5_clicked()
+{
+    if (cur_st < states.length()-1)
+    {
+        cur_st++;
+        ui->widget->SetGraph(states[cur_st]);
+    }
 }

@@ -28,8 +28,8 @@ public:
     int GetSize(); // возвращает количество вершин*/
     bool AddNode();
 
-    //Graph GetGraph();
-    //void SetGraph(Graph);
+    Graph GetGraph();
+    void SetGraph(Graph);
 
 signals:
     void edgeSelected(int);

@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QVector>
+#include "graphedit.h"
 
 namespace Ui {
 class MainWindow;
@@ -26,8 +28,14 @@ private slots:
 
     void on_pushButton_3_clicked();
 
+    void on_pushButton_4_clicked();
+
+    void on_pushButton_5_clicked();
+
 private:
     Ui::MainWindow *ui;
+    QVector<Graph> states;
+    int cur_st;
 };
 
 #endif // MAINWINDOW_H

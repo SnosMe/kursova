@@ -56,13 +56,21 @@ struct Graph
     QVector<GraphNode> nodes;
     QVector<GraphEdge> edges;
 
-    bool AddNode(float x = 0.5, float y = 0.5, int w = 0);
+    bool AddNode(float x = 0.5, float y = 0.5, int id = 0);
     bool AddEdge(int a, int b, int w);
     bool RemoveNode(int);
     bool RemoveEdge(int, int);
     int  GetNodeIndexByID(int);
+    QVector<GraphEdge> GetIncidentEdges(int);
+    GraphNode& GetNodeByID(int);
 
     void printNodes();
+
+   /* Graph(const Graph& src)
+    {
+        nodes = src.nodes;
+        edges = src.edges;
+    }*/
 };
 
 #endif // GRAPHNODE

@@ -394,6 +394,18 @@ bool GraphEdit::AddNode()
     update();
 }
 
+Graph GraphEdit::GetGraph()
+{
+    return g;
+}
+
+void GraphEdit::SetGraph(Graph src)
+{
+    g.nodes = src.nodes;
+    g.edges = src.edges;
+    update();
+}
+
 /*QVector<GraphEdge> GraphEdit::GetEdges()
 {
     return edges;
