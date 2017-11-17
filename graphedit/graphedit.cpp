@@ -21,6 +21,8 @@ GraphEdit::GraphEdit(QWidget *parent) : QWidget(parent)
 
 void GraphEdit::paintEvent(QPaintEvent*)
 {
+    g.printNodes();
+
     QPainter p(this);
 
     int w, h, r;
@@ -30,21 +32,24 @@ void GraphEdit::paintEvent(QPaintEvent*)
     h = sz.height();
     r = std::min(w, h)*0.1;
 
-    for (int i = 0; i < edges.length(); i++)
+    for (int i = 0; i < g.edges.length(); i++)
     {
-        int nd1 = edges[i].node1;
-        int nd2 = edges[i].node2;
+        int nd1 = g.edges[i].node1;
+        int nd2 = g.edges[i].node2;
 
-        int x1 = nodes[nd1].x*w;
-        int y1 = nodes[nd1].y*h;
-        int x2 = nodes[nd2].x*w;
-        int y2 = nodes[nd2].y*h;
+        int j1 = g.GetNodeIndexByID(nd1);
+        int j2 = g.GetNodeIndexByID(nd2);
+
+        int x1 = g.nodes[j1].x*w;
+        int y1 = g.nodes[j1].y*h;
+        int x2 = g.nodes[j2].x*w;
+        int y2 = g.nodes[j2].y*h;
 
         if (i == selected && mode == MODE_SELEDGE)
         {
             p.setPen(QPen(QColor(255, 0, 0)));
         }
-        else if (hl_edge[i])
+        else if (g.edges[i].colored)
         {
             p.setPen(QPen(QColor(0, 255, 0)));
         }
@@ -55,7 +60,7 @@ void GraphEdit::paintEvent(QPaintEvent*)
 
         p.drawLine(x1, y1, x2, y2);
 
-        p.drawText((x1+x2)/2, (y1+y2)/2, QVariant(edges[i].w).toString());
+        p.drawText((x1+x2)/2, (y1+y2)/2, QVariant(g.edges[i].w).toString());
     }
 
     p.setPen(QPen(QColor(0, 0, 0)));
@@ -65,15 +70,13 @@ void GraphEdit::paintEvent(QPaintEvent*)
         p.drawLine(from, to);
     }
 
-    for (int i = 0; i < nodes.length(); i++)
+    for (int i = 0; i < g.nodes.length(); i++)
     {
-        if (!removed[i])
-        {
-            if (i == selected && mode == MODE_MOVE)
+            if (g.nodes[i].id == selected && mode == MODE_MOVE)
             {
                 p.setBrush(QBrush(QColor(190, 190, 255)));
             }
-            else if (hl_node[i])
+            else if (g.nodes[i].colored)
             {
                 p.setBrush(QBrush(QColor(0, 255, 0)));
             }
@@ -82,12 +85,11 @@ void GraphEdit::paintEvent(QPaintEvent*)
                 p.setBrush(QBrush(QColor(255, 255, 255)));
             }
 
-            int x = nodes[i].x*w - r/2;
-            int y = nodes[i].y*h - r/2;
+            int x = g.nodes[i].x*w - r/2;
+            int y = g.nodes[i].y*h - r/2;
             p.drawEllipse(x, y, r, r);
 
-            p.drawText(QRectF(x, y, r, r), Qt::AlignCenter, QVariant(nodes[i].w).toString());
-        }
+            p.drawText(QRectF(x, y, r, r), Qt::AlignCenter, QVariant(g.nodes[i].id).toString());
     }
 }
 
@@ -153,7 +155,7 @@ void GraphEdit::mouseReleaseEvent(QMouseEvent* e)
         {
             if (id != selected && from != to)
             {
-                AddEdge(selected, id, 1);
+                g.AddEdge(selected, id, 1);
             }
         }
 
@@ -184,10 +186,14 @@ void GraphEdit::mouseMoveEvent(QMouseEvent* e)
             int x = e->x();
             int y = e->y();
 
+
+
             if (x >= 0 && x <= w && y >= 0 && y <= w)
             {
-                nodes[selected].x = e->x()/w;
-                nodes[selected].y = e->y()/h;
+                int index = g.GetNodeIndexByID(selected);
+
+                g.nodes[index].x = e->x()/w;
+                g.nodes[index].y = e->y()/h;
 
                 update();
             }
@@ -205,13 +211,13 @@ void GraphEdit::keyReleaseEvent(QKeyEvent* e)
         {
             if (mode == MODE_MOVE)
             {
-                RemoveNode(selected);
+                g.RemoveNode(selected);
                 selected = -1;
                 mode = MODE_NONE;
             }
             else if(mode == MODE_SELEDGE)
             {
-                RemoveEdge(selected);
+                g.edges.remove(selected);
                 emit edgeSelectionLoss();
                 selected = -1;
                 mode = MODE_NONE;
@@ -247,134 +253,7 @@ void GraphEdit::mouseDoubleClickEvent(QMouseEvent* e)
     update();
 }
 
-int GraphEdit::AddNode(float x, float y, int w)
-{
-    GraphNode nd;
-    nd.x = x;
-    nd.y = y;
-    nd.w = w;
 
-    removed.append(false);
-    nodes.append(nd);
-    hl_node.append(false);
-
-    update();
-
-    return 1;
-}
-
-int GraphEdit::AddNode(int w)
-{
-    AddNode(0.5, 0.5, w);
-
-    return 1;
-}
-
-int GraphEdit::AddNode()
-{
-    AddNode(0.5, 0.5, nodes.length()+1);
-
-    return 1;
-}
-
-int GraphEdit::AddNode(int x, int y)
-{
-    AddNode(x, y, nodes.length()+1);
-
-    return 1;
-}
-
-void GraphEdit::AddEdge(int a, int b, int w)
-{
-    qDebug() << "AddEdge" << a << " " << b << " " << w;
-
-    bool found = false;
-    for (int i = 0; i < edges.length(); i++)
-    {
-        if ((edges[i].node1 == a && edges[i].node2 == b) ||
-            (edges[i].node1 == b && edges[i].node2 == a))
-        {
-            found = true;
-            break;
-        }
-    }
-
-    if (a != b && !found)
-    {
-        GraphEdge ed;
-        ed.node1 = a;
-        ed.node2 = b;
-        ed.w     = w;
-
-        edges.append(ed);
-        hl_edge.append(false);
-        update();
-    }
-}
-
-bool GraphEdit::RemoveNode(int id)
-{
-    if (id < removed.length())
-    {
-        removed[id] = true;
-
-        int i = 0;
-        while (i < edges.length())
-        {
-            //qDebug() << "1: " << edges[i].node1 << "\t" << edges[i].node2;
-
-            if (edges[i].node1 == id ||
-                    edges[i].node2 == id)
-            {
-                //qDebug() << "removed";
-                edges.remove(i);
-            }
-            else
-            {
-                i++;
-            }
-        }
-
-        update();
-        return true;
-    }
-    else return false;
-}
-
-bool GraphEdit::RemoveEdge(int a, int b)
-{
-    bool found = false ;
-    int i = 0;
-
-    while (i < edges.length())
-    {
-        if ((edges[i].node1 == a &&
-             edges[i].node2 == b) ||
-                (edges[i].node1 == b &&
-                 edges[i].node2 == a))
-        {
-            edges.remove(i);
-            found = true;
-        }
-        else
-        {
-            i++;
-        }
-    }
-
-    update();
-
-    return found;
-}
-
-bool GraphEdit::RemoveEdge(int i)
-{
-   edges.remove(i);
-
-    update();
-
-    return true;
-}
 
 int GraphEdit::GetSelectedEdge()
 {
@@ -384,12 +263,13 @@ int GraphEdit::GetSelectedEdge()
 
 void GraphEdit::SetEdgeWeight(int id, int w)
 {
-    if (id >= 0 && id < edges.length())
+    if (id >= 0 && id < g.edges.length())
     {
-        edges[id].w = w;
+        g.edges[id].w = w;
     }
 }
 
+/*
 int** GraphEdit::GetMatrix()
 {
     int** ret = new int*[nodes.length()];
@@ -442,7 +322,7 @@ int GraphEdit::GetSize()
 {
     return nodes.length();
 }
-
+*/
 
 int GraphEdit::getNodeAt(int x, int y)
 {
@@ -453,12 +333,12 @@ int GraphEdit::getNodeAt(int x, int y)
     h = sz.height();
     r = std::min(w, h)*0.1;
 
-    for (int i = 0; i < nodes.length(); i++)
+    for (int i = 0; i < g.nodes.length(); i++)
     {
-        int d = dist(nodes[i].x*w - x, nodes[i].y*h - y);
+        int d = dist(g.nodes[i].x*w - x, g.nodes[i].y*h - y);
         if (d <= r)
         {
-            return i;
+            return g.nodes[i].id;
         }
     }
 
@@ -477,15 +357,18 @@ int GraphEdit::getEdgeAt(int x, int y)
     float rx = x/w;
     float ry = y/h;
 
-    for (int i = 0; i < edges.length(); i++)
+    for (int i = 0; i < g.edges.length(); i++)
     {
-        int v1 = edges[i].node1;
-        int v2 = edges[i].node2;
+        int v1 = g.edges[i].node1;
+        int v2 = g.edges[i].node2;
 
-        float x1 = nodes[v1].x;
-        float y1 = nodes[v1].y;
-        float x2 = nodes[v2].x;
-        float y2 = nodes[v2].y;
+        int i1 = g.GetNodeIndexByID(v1);
+        int i2 = g.GetNodeIndexByID(v2);
+
+        float x1 = g.nodes[i1].x;
+        float y1 = g.nodes[i1].y;
+        float x2 = g.nodes[i2].x;
+        float y2 = g.nodes[i2].y;
 
         qDebug() << x1 << rx << x2 << y1 << ry << y2;
 
@@ -505,7 +388,13 @@ int GraphEdit::getEdgeAt(int x, int y)
     return -1;
 }
 
-QVector<GraphEdge> GraphEdit::GetEdges()
+bool GraphEdit::AddNode()
+{
+    g.AddNode();
+    update();
+}
+
+/*QVector<GraphEdge> GraphEdit::GetEdges()
 {
     return edges;
 }
@@ -513,4 +402,4 @@ QVector<GraphEdge> GraphEdit::GetEdges()
 QVector<GraphNode> GraphEdit::GetNodes()
 {
     return nodes;
-}
+}*/

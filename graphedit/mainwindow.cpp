@@ -62,7 +62,7 @@ void MainWindow::on_widget_edgeSelectionLoss()
 
 void MainWindow::on_pushButton_3_clicked()
 {
-    int sz = ui->widget->GetSize();
-    ui->widget->HighlightNode(sz-1);
+   /* int sz = ui->widget->GetSize();
+    ui->widget->HighlightNode(sz-1);*/
     ui->widget->update();
 }

@@ -14,7 +14,8 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    graphedit.cpp
+    graphedit.cpp \
+    graph.cpp
 
 HEADERS  += mainwindow.h \
     graphedit.h \
