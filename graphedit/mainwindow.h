@@ -22,7 +22,7 @@ private slots:
 
     void on_pushButton_2_clicked();
 
-    void on_widget_edgeSelected(int );
+    void on_widget_edgeSelected(GraphEdge*);
 
     void on_widget_edgeSelectionLoss();
 

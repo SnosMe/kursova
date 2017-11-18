@@ -44,14 +44,14 @@ void MainWindow::on_widget_dblSelectionLoss()
 
 void MainWindow::on_pushButton_2_clicked()
 {
-    int index = ui->widget->GetSelectedEdge();
+    GraphEdge* edge = ui->widget->GetSelectedEdge();
     int w  = ui->lineEdit->text().toInt();
-    ui->widget->SetEdgeWeight(index, w);
+    ui->widget->SetEdgeWeight(edge, w);
     ui->lineEdit->setText(QString(""));
     ui->widget->update();
 }
 
-void MainWindow::on_widget_edgeSelected(int id)
+void MainWindow::on_widget_edgeSelected(GraphEdge* edge)
 {
     ui->pushButton_2->setEnabled(true);
 }
@@ -66,7 +66,7 @@ void MainWindow::on_pushButton_3_clicked()
    Graph gr = ui->widget->GetGraph();
    QStack<int> st;
 
-   st.push(1);
+   /*st.push(1);
 
    states.clear();
 
@@ -92,7 +92,7 @@ void MainWindow::on_pushButton_3_clicked()
     }
 
     cur_st = 0;
-    ui->widget->SetGraph(states[0]);
+    ui->widget->SetGraph(states[0]);*/
 
     ui->widget->update();
 }

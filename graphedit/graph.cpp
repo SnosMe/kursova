@@ -22,11 +22,9 @@ bool Graph::AddNode(float x, float y, int id)
     return true;
 }
 
-bool Graph::AddEdge(int a, int b, int w)
+bool Graph::AddEdge(GraphNode* a, GraphNode* b, int w)
 {
-    qDebug() << "Graph::AddEdge(" << a << ", " << b << ", " << w << ")";
-
-    if (a == b) return false;
+    if (a == b || a == nullptr || b == nullptr) return false;
 
     bool found = false;
     for (int i = 0; i < edges.length(); i++)
@@ -39,12 +37,12 @@ bool Graph::AddEdge(int a, int b, int w)
         }
     }
 
-    if (!found && GetNodeIndexByID(a) != -1 && GetNodeIndexByID(b) != -1)
+    if (!found)
     {
+        qDebug() << "Graph::AddEdge(" << a->id << ", " << b->id << ", " << w << ")";
+
         GraphEdge ed(a, b, w, false);
-
         edges.append(ed);
-
         return true;
     }
     else
@@ -53,22 +51,24 @@ bool Graph::AddEdge(int a, int b, int w)
     }
 }
 
-bool Graph::RemoveNode(int id)
+bool Graph::RemoveNode(GraphNode* node)
 {
-    int j = GetNodeIndexByID(id);
-    if (j != -1)
-    {
-        nodes.remove(j);
-    }
-    else
-    {
+    if (node == nullptr)
         return false;
+
+    for (int i = 0; i < nodes.length(); i++)
+    {
+        if (&nodes[i] == node)
+        {
+            nodes.remove(i);
+            break;
+        }
     }
 
     int i = 0;
     while (i < edges.length())
     {
-        if (edges[i].node1 == id || edges[i].node2 == id)
+        if (edges[i].node1 == node || edges[i].node2 == node)
         {
             edges.remove(i);
         }
@@ -80,9 +80,9 @@ bool Graph::RemoveNode(int id)
     return true;
 }
 
-bool Graph::RemoveEdge(int a, int b)
+/* bool Graph::RemoveEdge(int a, int b)
 {
-    bool found = false ;
+    bool found = false;
     int i = 0;
 
     while (i < edges.length())
@@ -102,7 +102,7 @@ bool Graph::RemoveEdge(int a, int b)
     }
 
     return found;
-}
+} */
 
 int Graph::GetNodeIndexByID(int id)
 {
@@ -117,13 +117,13 @@ int Graph::GetNodeIndexByID(int id)
     return -1;
 }
 
-QVector<GraphEdge> Graph::GetIncidentEdges(int id)
+QVector<GraphEdge> Graph::GetIncidentEdges(GraphNode* node)
 {
     QVector<GraphEdge> ret;
 
     for (int i = 0; i < edges.length(); i++)
     {
-        if (edges[i].node1 == id || edges[i].node2 == id)
+        if (edges[i].node1 == node || edges[i].node2 == node)
         {
             ret.push_back(edges[i]);
         }

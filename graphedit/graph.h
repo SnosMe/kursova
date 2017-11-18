@@ -5,49 +5,47 @@
 
 struct GraphNode
 {
-    float x;
-    float y;
-    int   id;
-    bool  colored;
+    float x;      // rendering
+    float y;      // rendering
+    int id;       // node friendly name
+    bool colored; // rendering
 
-    GraphNode()
-    {
-        x  = 0.5;
-        y  = 0.5;
-        id = 0;
-        colored = false;
-    }
+    bool existInTrees; // dijkstra
+    int length;        // dijkstra
 
-    GraphNode(int i, float px, float py, bool c)
+    GraphNode(int id = 0, float x = 0.5, float y = 0.5, bool colored = false)
     {
-        x  = px;
-        y  = py;
-        id = i;
-        colored = c;
+        this->x  = x;
+        this->y  = y;
+        this->id = id;
+        this->colored = colored;
+
+        existInTrees = false;
+        length = 0;
     }
 };
 
 struct GraphEdge
 {
-    int  node1;
-    int  node2;
-    int  w;
+    GraphNode* node1;
+    GraphNode* node2;
+    // int node1;
+    // int node2;
+    int w;
     bool colored;
 
-    GraphEdge()
+    GraphEdge(GraphNode* node1 = 0, GraphNode* node2 = 0, int weight = 1, bool colored = false)
     {
-        node1 = 0;
-        node2 = 0;
-        w = 1;
-        colored = false;
+        this->node1 = node1;
+        this->node2 = node2;
+        this->w = weight;
+        this->colored = colored;
     }
 
-    GraphEdge(int n1, int n2, int wgh, bool c)
+    ~GraphEdge ()
     {
-        node1 = n1;
-        node2 = n2;
-        w = wgh;
-        colored = c;
+        // delete n1; - managed by QVector
+        // delete n2; - managed by QVector
     }
 };
 
@@ -57,11 +55,11 @@ struct Graph
     QVector<GraphEdge> edges;
 
     bool AddNode(float x = 0.5, float y = 0.5, int id = 0);
-    bool AddEdge(int a, int b, int w);
-    bool RemoveNode(int);
-    bool RemoveEdge(int, int);
+    bool AddEdge(GraphNode* a, GraphNode* b, int w);
+    bool RemoveNode(GraphNode* node);
+    // bool RemoveEdge(int, int);
     int  GetNodeIndexByID(int);
-    QVector<GraphEdge> GetIncidentEdges(int);
+    QVector<GraphEdge> GetIncidentEdges(GraphNode* node);
     GraphNode& GetNodeByID(int);
 
     void printNodes();
