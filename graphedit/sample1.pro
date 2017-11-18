@@ -19,6 +19,7 @@ SOURCES += main.cpp\
 
 HEADERS  += mainwindow.h \
     graphedit.h \
-    graph.h
+    graph.h \
+    dijkstra.h
 
 FORMS    += mainwindow.ui

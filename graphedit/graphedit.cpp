@@ -27,6 +27,7 @@ void GraphEdit::paintEvent(QPaintEvent*)
     QPainter p(this);
 
     p.setRenderHints(QPainter::Antialiasing);
+    p.setFont(QFont("Consolas", 10));
 
     int w, h, r;
     QSize sz = this->size();
@@ -44,41 +45,57 @@ void GraphEdit::paintEvent(QPaintEvent*)
 
         if (&g.edges[i] == selectedEdge && mode == MODE_SELEDGE)
         {
-            p.setPen(QPen(QColor(255, 0, 0)));
+            p.setPen(QPen(QColor(255, 0, 0), 1.0));
         }
-        else if (g.edges[i].colored)
+        else if (g.edges[i].color == ColorMode::GREEN)
         {
-            p.setPen(QPen(QColor(0, 255, 0)));
+            p.setPen(QPen(QColor(0, 200, 83), 3.0));
+        }
+        else if (g.edges[i].color == ColorMode::BOLD)
+        {
+            p.setPen(QPen(QColor(33, 33, 33), 3.0));
         }
         else
         {
-            p.setPen(QPen(QColor(0, 0, 0)));
+            p.setPen(QPen(QColor(33, 33, 33), 1.0));
         }
 
         p.drawLine(x1, y1, x2, y2);
 
+        p.setPen(QPen(QColor(33, 33, 33), 1.0));
         p.drawText((x1+x2)/2, (y1+y2)/2, QVariant(g.edges[i].w).toString());
     }
 
-    p.setPen(QPen(QColor(0, 0, 0)));
+    p.setPen(QPen(QColor(33, 33, 33)));
 
     if (mode == MODE_NEWEDGE)
     {
         p.drawLine(from, to);
     }
 
+
     for (int i = 0; i < g.nodes.length(); i++)
     {
+        QPen textPan = QPen(QColor(33, 33, 33), 1.0);
+
         if (&g.nodes[i] == selectedNode && mode == MODE_MOVE)
         {
-            p.setBrush(QBrush(QColor(190, 190, 255)));
+            textPan = QPen(QColor(245, 245, 245), 1.0);
+            p.setBrush(QBrush(QColor(33, 33, 33)));
         }
-        else if (g.nodes[i].colored)
+        else if (g.nodes[i].color == ColorMode::GREEN)
         {
-            p.setBrush(QBrush(QColor(0, 255, 0)));
+            p.setPen(QPen(QColor(0, 200, 83), 1.0)); // border color
+            p.setBrush(QBrush(QColor(0, 200, 83))); // inset color
+        }
+        else if (g.nodes[i].color == ColorMode::BOLD)
+        {
+            p.setPen(QPen(QColor(33, 33, 33), 3.0));
+            p.setBrush(QBrush(QColor(255, 255, 255)));
         }
         else
         {
+            p.setPen(QPen(QColor(33, 33, 33), 1.0));
             p.setBrush(QBrush(QColor(255, 255, 255)));
         }
 
@@ -86,6 +103,7 @@ void GraphEdit::paintEvent(QPaintEvent*)
         int y = g.nodes[i].y*h - r/2;
         p.drawEllipse(x, y, r, r);
 
+        p.setPen(textPan);
         p.drawText(QRectF(x, y, r, r), Qt::AlignCenter, QVariant(g.nodes[i].id).toString());
     }
 }
