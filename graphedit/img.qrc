@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>img/checkbox-checked.png</file>
+        <file>img/checkbox-unchecked.png</file>
+    </qresource>
+</RCC>

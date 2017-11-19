@@ -166,6 +166,6 @@ void Graph::printNodes()
 {
     for (int i = 0; i < nodes.length(); i++)
     {
-        qDebug() << nodes[i].id << nodes[i].x << nodes[i].y;
+        qDebug().nospace() << "id=" << nodes[i].id << " (" << nodes[i].x << ", " << nodes[i].y << ") " << &nodes[i];
     }
 }

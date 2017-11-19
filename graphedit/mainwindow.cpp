@@ -9,8 +9,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
-    ui->pushButton_2->setEnabled(false);
 }
 
 MainWindow::~MainWindow()
@@ -21,7 +19,19 @@ MainWindow::~MainWindow()
 void MainWindow::on_pushButton_clicked()
 {
     //ui->lineEdit->setText("123456");
+    GraphNode* prev = nullptr;
+    GraphNode* end = nullptr;
+    if (ui->widget->GetGraph().nodes.length()) {
+        prev = &ui->widget->GetGraph().nodes.last();
+    }
+
     ui->widget->AddNode();
+    end = &ui->widget->GetGraph().nodes.last();
+
+    if (prev != nullptr && ui->autoConnectNodes->isChecked()) {
+        ui->widget->GetGraph().AddEdge(prev, end, 1);
+    }
+
   /*  ui->widget->AddNode(0.25, 0.75, 2);
     ui->widget->AddNode(0.75, 0.25, 50);
     ui->widget->AddNode(0.75, 0.75, 100);
@@ -56,11 +66,13 @@ void MainWindow::on_widget_edgeSelected(GraphEdge* edge)
 {
     ui->lineEdit->setText(QString::number(edge->w));
     ui->pushButton_2->setEnabled(true);
+    ui->lineEdit->setEnabled(true);
 }
 
 void MainWindow::on_widget_edgeSelectionLoss()
 {
     ui->pushButton_2->setEnabled(false);
+    ui->lineEdit->setEnabled(false);
     ui->lineEdit->clear();
 }
 

@@ -28,7 +28,7 @@ public:
     int GetSize(); // возвращает количество вершин*/
     bool AddNode();
 
-    Graph GetGraph();
+    Graph& GetGraph();
     void SetGraph(Graph);
 
 signals:

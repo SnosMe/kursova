@@ -23,3 +23,6 @@ HEADERS  += mainwindow.h \
     dijkstra.h
 
 FORMS    += mainwindow.ui
+
+RESOURCES += \
+    img.qrc

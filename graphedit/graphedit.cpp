@@ -261,6 +261,7 @@ void GraphEdit::mouseDoubleClickEvent(QMouseEvent* e)
     }
     else
     {
+        // create new Node at (x,y)
         selectedNode = nullptr;
         selectedEdge = nullptr;
         mode = MODE_NONE;
@@ -269,8 +270,6 @@ void GraphEdit::mouseDoubleClickEvent(QMouseEvent* e)
 
     update();
 }
-
-
 
 GraphEdge* GraphEdit::GetSelectedEdge()
 {
@@ -401,15 +400,14 @@ bool GraphEdit::AddNode()
     update();
 }
 
-Graph GraphEdit::GetGraph()
+Graph& GraphEdit::GetGraph()
 {
     return g;
 }
 
 void GraphEdit::SetGraph(Graph src)
 {
-    g.nodes = src.nodes;
-    g.edges = src.edges;
+    g = src;
     update();
 }
 
