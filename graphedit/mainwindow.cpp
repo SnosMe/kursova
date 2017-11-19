@@ -16,6 +16,11 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+bool MainWindow::autoConnectNodes()
+{
+    return ui->autoConnectNodes->isChecked();
+}
+
 void MainWindow::on_pushButton_2_clicked()
 {
     GraphEdge* edge = ui->widget->GetSelectedEdge();
@@ -103,9 +108,9 @@ void MainWindow::on_pushButton_3_clicked()
 
 void MainWindow::on_btn_firstState_clicked()
 {
-    if (stateIdx != 0)
+    if (stateIdx != 1)
     {
-        stateIdx = 0;
+        stateIdx = 1;
         ui->widget->clearInternalState();
         // this->on_widget_edgeSelectionLoss(); GLOBAL_STATE if ==
         ui->widget->SetGraph(states[stateIdx]);
@@ -114,7 +119,7 @@ void MainWindow::on_btn_firstState_clicked()
 
 void MainWindow::on_btn_prevState_clicked()
 {
-    if (stateIdx > 0)
+    if (stateIdx > 1)
     {
         stateIdx--;
         ui->widget->clearInternalState();
@@ -147,6 +152,8 @@ void MainWindow::on_btn_dijkstra_clicked()
         states.clear();
 
         Graph gCopy = ui->widget->GetGraph();
+        states.append(gCopy); // add graph at [0] as original
+
         QVector<DijkstraGraph> dGraphArr;
         DijkstraGraph dGraph = DijkstraGraph();
         GraphNode* startVert = &gCopy.nodes[0];
@@ -238,7 +245,15 @@ void MainWindow::on_btn_dijkstra_clicked()
             }
         }
 
-        stateIdx = 0;
+        stateIdx = 1;
         ui->widget->SetGraph(states[stateIdx]);
         ui->widget->update();
+        ui->toolsWidget->setCurrentWidget(ui->viewTools);
+}
+
+void MainWindow::on_btn_editGraph_clicked()
+{
+    ui->widget->SetGraph(states[0]);
+    ui->widget->update();
+    ui->toolsWidget->setCurrentWidget(ui->editTools);
 }

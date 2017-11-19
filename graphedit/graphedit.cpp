@@ -4,7 +4,6 @@
 #include <QDebug>
 #include <QMouseEvent>
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
 #include "graphedit.h"
 
 const float LINE_WIDTH = 0.05;
@@ -152,8 +151,8 @@ void GraphEdit::mousePressEvent(QMouseEvent* e)
         {
             selectedEdge = edge;
             selectedNode = nullptr;
+            if (mode == MODE_MOVE) emit nodeSelectionLoss();
             mode = MODE_SELEDGE;
-            emit nodeSelectionLoss();
             emit edgeSelected(edge);
             update();
             qDebug() << "MODE_SELEDGE";
@@ -166,6 +165,11 @@ void GraphEdit::mousePressEvent(QMouseEvent* e)
                 update();
                 emit edgeSelectionLoss();
             }
+            else if (mode == MODE_MOVE)
+            {
+                update();
+                emit nodeSelectionLoss();
+            }
             mode = MODE_NONE;
             qDebug() << "MODE_NONE";
         }
@@ -174,20 +178,58 @@ void GraphEdit::mousePressEvent(QMouseEvent* e)
 
 void GraphEdit::mouseReleaseEvent(QMouseEvent* e)
 {
-    if (mode == MODE_NEWEDGE)
+    if (e->button() == Qt::LeftButton)
     {
-        GraphNode* node = getNodeAt(e->x(), e->y());
-        if (node != nullptr)
+        if (mode == MODE_NEWEDGE)
         {
-            if (node != selectedNode && from != to)
+            GraphNode* node = getNodeAt(e->x(), e->y());
+            if (node != nullptr)
             {
-                g.AddEdge(selectedNode, node, 1);
+                if (node != selectedNode && from != to)
+                {
+                    g.AddEdge(selectedNode, node, 1);
+                }
             }
-        }
 
-        mode = MODE_NONE;
-        qDebug() << "MODE_NONE";
-        update();
+            mode = MODE_NONE;
+            qDebug() << "MODE_NONE";
+            update();
+        }
+    }
+    else if (e->button() == Qt::RightButton)
+    {
+        if (selectedEdge != nullptr ||
+            selectedNode != nullptr)
+        {
+            if (mode == MODE_MOVE)
+            {
+                g.RemoveNode(selectedNode);
+                selectedNode = nullptr;
+                emit nodeSelectionLoss();
+                mode = MODE_NONE;
+            }
+            else if (mode == MODE_SELEDGE)
+            {
+                g.RemoveEdge(selectedEdge);
+                emit edgeSelectionLoss();
+                selectedEdge = nullptr;
+                mode = MODE_NONE;
+            } else {
+                int x = e->x();
+                int y = e->y();
+
+                GraphNode* node = getNodeAt(x, y);
+                if (node != nullptr) {
+                    g.RemoveNode(selectedNode);
+                }
+            }
+
+            if (mode == MODE_NEWEDGE) {
+                mode = MODE_NONE;
+                qDebug() << "MODE_NONE";
+            }
+            update();
+        }
     }
 }
 
@@ -252,6 +294,10 @@ void GraphEdit::keyReleaseEvent(QKeyEvent* e)
 
 void GraphEdit::mouseDoubleClickEvent(QMouseEvent* e)
 {
+    if (e->button() != Qt::LeftButton) {
+        return;
+    }
+
     int x = e->x();
     int y = e->y();
 
@@ -418,7 +464,7 @@ bool GraphEdit::AddNode(int x, int y)
     g.AddNode(float(x)/w, float(y)/h);
 
     end = &g.nodes.last();
-    if (prev != nullptr && static_cast<MainWindow*>(QWidget::window())->ui->autoConnectNodes->isChecked()) {
+    if (prev != nullptr && static_cast<MainWindow*>(QWidget::window())->autoConnectNodes()) {
         g.AddEdge(prev, end, 1);
     }
 

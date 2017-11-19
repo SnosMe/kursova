@@ -16,7 +16,7 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    Ui::MainWindow *ui;
+    bool autoConnectNodes();
 
 private slots:
     void on_pushButton_2_clicked();
@@ -37,7 +37,10 @@ private slots:
     void on_btn_dijkstra_clicked();
 
 
+    void on_btn_editGraph_clicked();
+
 private:
+    Ui::MainWindow *ui;
     QList<Graph> states;
     int stateIdx;
 };
