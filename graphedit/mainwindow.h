@@ -23,20 +23,19 @@ private slots:
     void on_pushButton_2_clicked();
 
     void on_widget_edgeSelected(GraphEdge*);
-
     void on_widget_edgeSelectionLoss();
+    void on_widget_nodeSelected(GraphNode*);
+    void on_widget_nodeSelectionLoss();
+    void on_lineEdit_textEdited(const QString &str);
 
     void on_pushButton_3_clicked();
 
+    void on_btn_firstState_clicked();
     void on_btn_prevState_clicked();
-
     void on_btn_nextState_clicked();
+    void on_btn_lastState_clicked();
 
     void on_btn_dijkstra_clicked();
-
-    void on_btn_firstState_clicked();
-
-    void on_btn_lastState_clicked();
 
 private:
     Ui::MainWindow *ui;

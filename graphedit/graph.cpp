@@ -98,29 +98,22 @@ bool Graph::RemoveNode(GraphNode* node)
     return true;
 }
 
-/* bool Graph::RemoveEdge(int a, int b)
+bool Graph::RemoveEdge(GraphEdge* edge)
 {
-    bool found = false;
-    int i = 0;
+    if (edge == nullptr)
+        return false;
 
-    while (i < edges.length())
+    for (int i = 0; i < edges.length(); i++)
     {
-        if ((edges[i].node1 == a &&
-             edges[i].node2 == b) ||
-                (edges[i].node1 == b &&
-                 edges[i].node2 == a))
+        if (&edges[i] == edge)
         {
-            edges.remove(i);
-            found = true;
-        }
-        else
-        {
-            i++;
+            edges.removeAt(i);
+            break;
         }
     }
 
-    return found;
-} */
+    return true;
+}
 
 int Graph::GetNodeIndexByID(int id)
 {

@@ -26,7 +26,9 @@ public:
     void HighlightEdge(int a, int b, bool v = true); // подсветить ребро
     void HighlightNode(int i, bool v = true); // подсветить вершину
     int GetSize(); // возвращает количество вершин*/
-    bool AddNode();
+    bool AddNode(int x, int y);
+    GraphNode*          selectedNode;
+    GraphEdge*          selectedEdge;
 
     Graph& GetGraph();
     void SetGraph(Graph);
@@ -35,6 +37,8 @@ public:
 signals:
     void edgeSelected(GraphEdge* edge);
     void edgeSelectionLoss();
+    void nodeSelected(GraphNode* node);
+    void nodeSelectionLoss();
 
 private:
     Graph g;
@@ -44,8 +48,6 @@ private:
     QVector<bool>       hl_edge;
     QVector<bool>       hl_node;*/
     EditorMode          mode;
-    GraphNode*          selectedNode;
-    GraphEdge*          selectedEdge;
     QPoint              from;
     QPoint              to;
 

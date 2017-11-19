@@ -18,7 +18,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_clicked()
 {
-    GraphNode* prev = nullptr;
+    /* GraphNode* prev = nullptr;
     GraphNode* end = nullptr;
     if (ui->widget->GetGraph().nodes.length()) {
         prev = &ui->widget->GetGraph().nodes.last();
@@ -29,7 +29,7 @@ void MainWindow::on_pushButton_clicked()
 
     if (prev != nullptr && ui->autoConnectNodes->isChecked()) {
         ui->widget->GetGraph().AddEdge(prev, end, 1);
-    }
+    } */
 }
 
 void MainWindow::on_pushButton_2_clicked()
@@ -40,11 +40,36 @@ void MainWindow::on_pushButton_2_clicked()
     ui->widget->update();
 }
 
+void MainWindow::on_lineEdit_textEdited(const QString &str)
+{
+    if (ui->widget->selectedEdge != nullptr) {
+        int w  = str.toInt();
+        if (w > 0) {
+            ui->widget->selectedEdge->w = w;
+            ui->widget->update();
+        }
+    } else if (ui->widget->selectedNode != nullptr) {
+        ui->widget->selectedNode->name = str;
+        ui->widget->update();
+    }
+}
+
 void MainWindow::on_widget_edgeSelected(GraphEdge* edge)
 {
     ui->lineEdit->setText(QString::number(edge->w));
     ui->pushButton_2->setEnabled(true);
     ui->lineEdit->setEnabled(true);
+    ui->lineEdit->setFocus();
+    ui->lineEdit->selectAll();
+}
+
+void MainWindow::on_widget_nodeSelected(GraphNode* node)
+{
+    ui->lineEdit->setText(node->name);
+    ui->pushButton_2->setEnabled(true);
+    ui->lineEdit->setEnabled(true);
+    ui->lineEdit->setFocus();
+    ui->lineEdit->selectAll();
 }
 
 void MainWindow::on_widget_edgeSelectionLoss()
@@ -52,6 +77,11 @@ void MainWindow::on_widget_edgeSelectionLoss()
     ui->pushButton_2->setEnabled(false);
     ui->lineEdit->setEnabled(false);
     ui->lineEdit->clear();
+}
+
+void MainWindow::on_widget_nodeSelectionLoss()
+{
+    on_widget_edgeSelectionLoss();
 }
 
 void MainWindow::on_pushButton_3_clicked()
@@ -96,6 +126,7 @@ void MainWindow::on_btn_firstState_clicked()
     {
         stateIdx = 0;
         ui->widget->clearInternalState();
+        // this->on_widget_edgeSelectionLoss(); GLOBAL_STATE if ==
         ui->widget->SetGraph(states[stateIdx]);
     }
 }

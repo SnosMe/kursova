@@ -16,7 +16,8 @@ struct GraphNode
 {
     float x;      // rendering
     float y;      // rendering
-    int id;       // node friendly name
+    int id;       // internal unique id
+    QString name; // node friendly name
     ColorMode color; // rendering
 
     bool existInTrees; // dijkstra
@@ -27,6 +28,7 @@ struct GraphNode
         this->x  = x;
         this->y  = y;
         this->id = id;
+        this->name = QString::number(id);
         this->color = color;
 
         existInTrees = false;
@@ -66,7 +68,7 @@ struct Graph
     bool AddNode(float x = 0.5, float y = 0.5, int id = 0);
     bool AddEdge(GraphNode* a, GraphNode* b, int w);
     bool RemoveNode(GraphNode* node);
-    // bool RemoveEdge(int, int);
+    bool RemoveEdge(GraphEdge* edge);
     int  GetNodeIndexByID(int);
     QVector<GraphEdge*> GetIncidentEdges(GraphNode* node);
     QVector<GraphEdge*> getLowestEdge(QVector<GraphEdge*> edges);

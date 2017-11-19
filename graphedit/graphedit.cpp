@@ -104,7 +104,7 @@ void GraphEdit::paintEvent(QPaintEvent*)
         p.drawEllipse(x, y, r, r);
 
         p.setPen(textPan);
-        p.drawText(QRectF(x, y, r, r), Qt::AlignCenter, QVariant(g.nodes[i].id).toString());
+        p.drawText(QRectF(x, y, r, r), Qt::AlignCenter, g.nodes[i].name);
     }
 }
 
@@ -117,14 +117,17 @@ void GraphEdit::mousePressEvent(QMouseEvent* e)
 
     if (node != nullptr)
     {
-        int id = node->id;
-
         selectedNode = node;
         selectedEdge = nullptr;
         from.setX(x);
         from.setY(y);
         to.setX(x);
         to.setY(y);
+
+        if (mode == MODE_MOVE)
+        {
+            emit nodeSelected(node);
+        }
 
         if (mode == MODE_NONE)
         {
@@ -137,7 +140,7 @@ void GraphEdit::mousePressEvent(QMouseEvent* e)
             mode = MODE_NEWEDGE;
             qDebug() << "MODE_NEWEDGE";
         }
-
+        update();
     }
     else
     {
@@ -148,20 +151,23 @@ void GraphEdit::mousePressEvent(QMouseEvent* e)
             selectedEdge = edge;
             selectedNode = nullptr;
             mode = MODE_SELEDGE;
+            emit nodeSelectionLoss();
             emit edgeSelected(edge);
+            update();
             qDebug() << "MODE_SELEDGE";
         }
         else
         {
             selectedEdge = nullptr;
             selectedNode = nullptr;
-            if (mode == MODE_SELEDGE) emit edgeSelectionLoss();
+            if (mode == MODE_SELEDGE) {
+                update();
+                emit edgeSelectionLoss();
+            }
             mode = MODE_NONE;
             qDebug() << "MODE_NONE";
         }
     }
-
-    update();
 }
 
 void GraphEdit::mouseReleaseEvent(QMouseEvent* e)
@@ -230,15 +236,15 @@ void GraphEdit::keyReleaseEvent(QKeyEvent* e)
                 selectedNode = nullptr;
                 mode = MODE_NONE;
             }
-            /* else if (mode == MODE_SELEDGE)
+            else if (mode == MODE_SELEDGE)
             {
-                g.edges.remove(selectedEdge);
+                g.RemoveEdge(selectedEdge);
                 emit edgeSelectionLoss();
                 selectedEdge = nullptr;
                 mode = MODE_NONE;
-            } */
+            }
+            update();
         }
-        update();
     }
 }
 
@@ -256,12 +262,13 @@ void GraphEdit::mouseDoubleClickEvent(QMouseEvent* e)
 
         if (mode == MODE_SELEDGE) emit edgeSelectionLoss();
         mode = MODE_MOVE;
+        emit nodeSelected(node);
 
         qDebug() << "MODE_MOVE";
     }
     else
     {
-        // create new Node at (x,y)
+        this->AddNode(x, y);
         selectedNode = nullptr;
         selectedEdge = nullptr;
         mode = MODE_NONE;
@@ -394,10 +401,14 @@ GraphEdge* GraphEdit::getEdgeAt(int x, int y)
     return nullptr;
 }
 
-bool GraphEdit::AddNode()
+bool GraphEdit::AddNode(int x, int y)
 {
-    g.AddNode();
-    update();
+    int w, h;
+    QSize sz = this->size();
+
+    w = sz.width();
+    h = sz.height();
+    return g.AddNode(float(x)/w, float(y)/h);
 }
 
 Graph& GraphEdit::GetGraph()
