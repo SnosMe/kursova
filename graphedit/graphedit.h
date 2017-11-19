@@ -30,6 +30,7 @@ public:
 
     Graph& GetGraph();
     void SetGraph(Graph);
+    void clearInternalState();
 
 signals:
     void edgeSelected(GraphEdge* edge);
@@ -43,7 +44,6 @@ private:
     QVector<bool>       hl_edge;
     QVector<bool>       hl_node;*/
     EditorMode          mode;
-    int                 selected;
     GraphNode*          selectedNode;
     GraphEdge*          selectedEdge;
     QPoint              from;

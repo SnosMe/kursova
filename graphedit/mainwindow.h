@@ -34,6 +34,10 @@ private slots:
 
     void on_btn_dijkstra_clicked();
 
+    void on_btn_firstState_clicked();
+
+    void on_btn_lastState_clicked();
+
 private:
     Ui::MainWindow *ui;
     QList<Graph> states;

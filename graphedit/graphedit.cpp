@@ -411,6 +411,14 @@ void GraphEdit::SetGraph(Graph src)
     update();
 }
 
+void GraphEdit::clearInternalState()
+{
+    mode = MODE_NONE;
+    selectedEdge = nullptr;
+    selectedNode = nullptr;
+    // from, to = ;
+}
+
 /*QVector<GraphEdge> GraphEdit::GetEdges()
 {
     return edges;

@@ -18,7 +18,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_clicked()
 {
-    //ui->lineEdit->setText("123456");
     GraphNode* prev = nullptr;
     GraphNode* end = nullptr;
     if (ui->widget->GetGraph().nodes.length()) {
@@ -31,28 +30,7 @@ void MainWindow::on_pushButton_clicked()
     if (prev != nullptr && ui->autoConnectNodes->isChecked()) {
         ui->widget->GetGraph().AddEdge(prev, end, 1);
     }
-
-  /*  ui->widget->AddNode(0.25, 0.75, 2);
-    ui->widget->AddNode(0.75, 0.25, 50);
-    ui->widget->AddNode(0.75, 0.75, 100);
-
-    ui->widget->AddEdge(0,1,5);
-    ui->widget->AddEdge(2,1,6);
-    ui->widget->AddEdge(3,1,8);
-    ui->widget->AddEdge(2,3,10);*/
-
-   // ui->widget->update();
 }
-
-/*void MainWindow::on_widget_twoNodesSelected(int, int)
-{
-    ui->pushButton_2->setEnabled(true);
-}
-
-void MainWindow::on_widget_dblSelectionLoss()
-{
-
-}*/
 
 void MainWindow::on_pushButton_2_clicked()
 {
@@ -78,10 +56,10 @@ void MainWindow::on_widget_edgeSelectionLoss()
 
 void MainWindow::on_pushButton_3_clicked()
 {
-   Graph gr = ui->widget->GetGraph();
+   /* Graph gr = ui->widget->GetGraph();
    QStack<int> st;
 
-   /*st.push(1);
+   st.push(1);
 
    states.clear();
 
@@ -107,9 +85,19 @@ void MainWindow::on_pushButton_3_clicked()
     }
 
     cur_st = 0;
-    ui->widget->SetGraph(states[0]);*/
+    ui->widget->SetGraph(states[0]);
 
-    ui->widget->update();
+    ui->widget->update(); */
+}
+
+void MainWindow::on_btn_firstState_clicked()
+{
+    if (stateIdx != 0)
+    {
+        stateIdx = 0;
+        ui->widget->clearInternalState();
+        ui->widget->SetGraph(states[stateIdx]);
+    }
 }
 
 void MainWindow::on_btn_prevState_clicked()
@@ -117,6 +105,7 @@ void MainWindow::on_btn_prevState_clicked()
     if (stateIdx > 0)
     {
         stateIdx--;
+        ui->widget->clearInternalState();
         ui->widget->SetGraph(states[stateIdx]);
     }
 }
@@ -126,6 +115,17 @@ void MainWindow::on_btn_nextState_clicked()
     if (stateIdx < states.length()-1)
     {
         stateIdx++;
+        ui->widget->clearInternalState();
+        ui->widget->SetGraph(states[stateIdx]);
+    }
+}
+
+void MainWindow::on_btn_lastState_clicked()
+{
+    if (stateIdx != states.length()-1)
+    {
+        stateIdx = states.length()-1;
+        ui->widget->clearInternalState();
         ui->widget->SetGraph(states[stateIdx]);
     }
 }
