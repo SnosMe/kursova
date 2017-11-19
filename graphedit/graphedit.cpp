@@ -3,6 +3,8 @@
 #include <QVariant>
 #include <QDebug>
 #include <QMouseEvent>
+#include "mainwindow.h"
+#include "ui_mainwindow.h"
 #include "graphedit.h"
 
 const float LINE_WIDTH = 0.05;
@@ -403,12 +405,24 @@ GraphEdge* GraphEdit::getEdgeAt(int x, int y)
 
 bool GraphEdit::AddNode(int x, int y)
 {
+    GraphNode* prev = nullptr;
+    GraphNode* end = nullptr;
+    if (g.nodes.length()) {
+        prev = &g.nodes.last();
+    }
+
     int w, h;
     QSize sz = this->size();
-
     w = sz.width();
     h = sz.height();
-    return g.AddNode(float(x)/w, float(y)/h);
+    g.AddNode(float(x)/w, float(y)/h);
+
+    end = &g.nodes.last();
+    if (prev != nullptr && static_cast<MainWindow*>(QWidget::window())->ui->autoConnectNodes->isChecked()) {
+        g.AddEdge(prev, end, 1);
+    }
+
+    return true;
 }
 
 Graph& GraphEdit::GetGraph()

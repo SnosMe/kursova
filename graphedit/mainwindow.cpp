@@ -16,22 +16,6 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_pushButton_clicked()
-{
-    /* GraphNode* prev = nullptr;
-    GraphNode* end = nullptr;
-    if (ui->widget->GetGraph().nodes.length()) {
-        prev = &ui->widget->GetGraph().nodes.last();
-    }
-
-    ui->widget->AddNode();
-    end = &ui->widget->GetGraph().nodes.last();
-
-    if (prev != nullptr && ui->autoConnectNodes->isChecked()) {
-        ui->widget->GetGraph().AddEdge(prev, end, 1);
-    } */
-}
-
 void MainWindow::on_pushButton_2_clicked()
 {
     GraphEdge* edge = ui->widget->GetSelectedEdge();
@@ -57,7 +41,6 @@ void MainWindow::on_lineEdit_textEdited(const QString &str)
 void MainWindow::on_widget_edgeSelected(GraphEdge* edge)
 {
     ui->lineEdit->setText(QString::number(edge->w));
-    ui->pushButton_2->setEnabled(true);
     ui->lineEdit->setEnabled(true);
     ui->lineEdit->setFocus();
     ui->lineEdit->selectAll();
@@ -66,7 +49,6 @@ void MainWindow::on_widget_edgeSelected(GraphEdge* edge)
 void MainWindow::on_widget_nodeSelected(GraphNode* node)
 {
     ui->lineEdit->setText(node->name);
-    ui->pushButton_2->setEnabled(true);
     ui->lineEdit->setEnabled(true);
     ui->lineEdit->setFocus();
     ui->lineEdit->selectAll();
@@ -74,7 +56,6 @@ void MainWindow::on_widget_nodeSelected(GraphNode* node)
 
 void MainWindow::on_widget_edgeSelectionLoss()
 {
-    ui->pushButton_2->setEnabled(false);
     ui->lineEdit->setEnabled(false);
     ui->lineEdit->clear();
 }
