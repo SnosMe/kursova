@@ -36,7 +36,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    QVector<Graph> states;
+    QList<Graph> states;
     int stateIdx;
 };
 

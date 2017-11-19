@@ -2,6 +2,8 @@
 #define GRAPHNODE
 
 #include <QVector>
+#include <QList>
+#include <QDebug>
 
 enum struct ColorMode
 {
@@ -58,7 +60,7 @@ struct GraphEdge
 
 struct Graph
 {
-    QVector<GraphNode> nodes;
+    QList<GraphNode> nodes;
     QVector<GraphEdge> edges;
 
     bool AddNode(float x = 0.5, float y = 0.5, int id = 0);
@@ -76,6 +78,7 @@ struct Graph
 
     Graph(const Graph& src)
     {
+        qDebug() << "Graph::CopyCtor()";
         nodes = src.nodes;
         edges = src.edges;
         for (auto& edge : edges) {

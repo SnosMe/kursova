@@ -78,7 +78,7 @@ bool Graph::RemoveNode(GraphNode* node)
     {
         if (&nodes[i] == node)
         {
-            nodes.remove(i);
+            nodes.removeAt(i);
             break;
         }
     }

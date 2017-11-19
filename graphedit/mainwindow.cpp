@@ -132,7 +132,6 @@ void MainWindow::on_btn_nextState_clicked()
 
 void MainWindow::on_btn_dijkstra_clicked()
 {
-        // Graph g = ;
         states.clear();
 
         Graph gCopy = ui->widget->GetGraph();
