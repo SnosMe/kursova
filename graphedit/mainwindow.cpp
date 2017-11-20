@@ -1,8 +1,10 @@
 #include <QStack>
 #include <QDebug>
+#include <QFileDialog>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "dijkstra.h"
+#include "graphwriter.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -19,14 +21,6 @@ MainWindow::~MainWindow()
 bool MainWindow::autoConnectNodes()
 {
     return ui->autoConnectNodes->isChecked();
-}
-
-void MainWindow::on_pushButton_2_clicked()
-{
-    GraphEdge* edge = ui->widget->GetSelectedEdge();
-    int w  = ui->lineEdit->text().toInt();
-    ui->widget->SetEdgeWeight(edge, w);
-    ui->widget->update();
 }
 
 void MainWindow::on_lineEdit_textEdited(const QString &str)
@@ -68,42 +62,6 @@ void MainWindow::on_widget_edgeSelectionLoss()
 void MainWindow::on_widget_nodeSelectionLoss()
 {
     on_widget_edgeSelectionLoss();
-}
-
-void MainWindow::on_pushButton_3_clicked()
-{
-   /* Graph gr = ui->widget->GetGraph();
-   QStack<int> st;
-
-   st.push(1);
-
-   states.clear();
-
-    while(!st.isEmpty())
-    {
-        int cur = st.pop();
-        QVector<GraphEdge> inc = gr.GetIncidentEdges(cur);
-        for (int i = 0; i < inc.length(); i++)
-        {
-            if (inc[i].node1 != cur && !gr.GetNodeByID(inc[i].node1).colored)
-            {
-                st.push(inc[i].node1);
-            }
-            else if (inc[i].node2 != cur && !gr.GetNodeByID(inc[i].node2).colored)
-            {
-                st.push(inc[i].node2);
-            }
-        }
-
-        gr.GetNodeByID(cur).colored = true;
-
-        states.push_back(gr);
-    }
-
-    cur_st = 0;
-    ui->widget->SetGraph(states[0]);
-
-    ui->widget->update(); */
 }
 
 void MainWindow::on_btn_firstState_clicked()
@@ -256,4 +214,20 @@ void MainWindow::on_btn_editGraph_clicked()
     ui->widget->SetGraph(states[0]);
     ui->widget->update();
     ui->toolsWidget->setCurrentWidget(ui->editTools);
+}
+
+void MainWindow::on_saveToFile_triggered()
+{
+    QString fileName = QFileDialog::getSaveFileName(this, "Зберегти як GraphML", "", "GraphML (*.graphml)");
+
+    if (!fileName.isEmpty())
+    {
+        QFile file(fileName);
+        file.open(QIODevice::WriteOnly);
+
+        GraphWriter out(ui->widget->GetGraph(), file);
+        out.writeToFile();
+
+        file.close();
+    }
 }

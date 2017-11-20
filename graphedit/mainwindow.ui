@@ -551,8 +551,8 @@ font-size: 14px;
     <property name="title">
      <string>Файл</string>
     </property>
-    <addaction name="action"/>
-    <addaction name="action_2"/>
+    <addaction name="saveToFile"/>
+    <addaction name="openFromFile"/>
    </widget>
    <widget class="QMenu" name="menu_2">
     <property name="title">
@@ -564,12 +564,12 @@ font-size: 14px;
    <addaction name="menu"/>
    <addaction name="menu_2"/>
   </widget>
-  <action name="action">
+  <action name="saveToFile">
    <property name="text">
     <string>Зберегти</string>
    </property>
   </action>
-  <action name="action_2">
+  <action name="openFromFile">
    <property name="text">
     <string>Відкрити</string>
    </property>

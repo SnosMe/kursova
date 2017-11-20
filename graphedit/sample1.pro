@@ -15,12 +15,14 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     graphedit.cpp \
-    graph.cpp
+    graph.cpp \
+    graphwriter.cpp
 
 HEADERS  += mainwindow.h \
     graphedit.h \
     graph.h \
-    dijkstra.h
+    dijkstra.h \
+    graphwriter.h
 
 FORMS    += mainwindow.ui
 
