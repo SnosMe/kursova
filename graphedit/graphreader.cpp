@@ -28,8 +28,16 @@ Graph& GraphReader::readFromFile()
                 }
             }
         }
-        else if (reader.name() != "graph" &&
-                 reader.name() != "graphml") {
+        else if (reader.name() == "graph")
+        {
+            for(QXmlStreamAttribute& attr : reader.attributes())
+            {
+                if (attr.name() == "edgedefault") {
+                    g.directed = (attr.value() == "directed");
+                }
+            }
+        }
+        else if (reader.name() != "graphml") {
             reader.skipCurrentElement();
         }
     }

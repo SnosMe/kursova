@@ -62,6 +62,10 @@ void GraphEdit::paintEvent(QPaintEvent*)
         }
 
         p.drawLine(x1, y1, x2, y2);
+        if (g.directed)
+        {
+            // TODO draw arrow [1] -----> [2]
+        }
 
         p.setPen(QPen(QColor(33, 33, 33), 1.0));
         p.drawText((x1+x2)/2, (y1+y2)/2, QVariant(g.edges[i].w).toString());

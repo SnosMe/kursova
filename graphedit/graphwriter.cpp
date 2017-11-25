@@ -26,7 +26,7 @@ void GraphWriter::writeToFile()
     writeKeys();
 
     writer->writeStartElement("graph");
-    writer->writeAttribute("edgedefault", "undirected");
+    writer->writeAttribute("edgedefault", (g.directed) ? "directed" : "undirected");
 
     writeNodes();
     writeEdges();

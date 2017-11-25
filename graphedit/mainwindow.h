@@ -17,6 +17,8 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     bool autoConnectNodes();
+    bool isDirectedGraph();
+    void setDirectedGraph(bool);
 
 private slots:
     void on_widget_edgeSelected(GraphEdge*);
@@ -38,6 +40,10 @@ private slots:
 
     void on_btn_markBegin_clicked();
     void on_btn_markEnd_clicked();
+
+    void on_btn_clearAll_clicked();
+
+    void on_directedGraph_stateChanged(int state);
 
 private:
     Ui::MainWindow *ui;

@@ -66,6 +66,7 @@ struct Graph
     QVector<GraphEdge> edges;
     GraphNode* begin;
     GraphNode* end;
+    bool directed;
 
     bool AddNode(float x = 0.5, float y = 0.5, int id = 0);
     bool AddEdge(GraphNode* a, GraphNode* b, int w);
@@ -84,6 +85,7 @@ struct Graph
     {
         begin = nullptr;
         end = nullptr;
+        directed = false;
     }
 
     Graph(const Graph& src)
@@ -97,6 +99,7 @@ struct Graph
         qDebug() << "Graph::operator=";
         nodes = src.nodes;
         edges = src.edges;
+        directed = src.directed;
 
         begin = (src.begin != nullptr) ? GetNodeByID(src.begin->id) : nullptr;
         end = (src.end != nullptr) ? GetNodeByID(src.end->id) : nullptr;
@@ -111,4 +114,3 @@ struct Graph
 };
 
 #endif // GRAPHNODE
-

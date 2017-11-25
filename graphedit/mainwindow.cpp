@@ -24,6 +24,17 @@ bool MainWindow::autoConnectNodes()
     return ui->autoConnectNodes->isChecked();
 }
 
+bool MainWindow::isDirectedGraph()
+{
+    return ui->directedGraph->isChecked();
+}
+
+void MainWindow::setDirectedGraph(bool directed)
+{
+    ui->directedGraph->setChecked(directed);
+    ui->widget->GetGraph().directed = directed;
+}
+
 void MainWindow::on_lineEdit_textEdited(const QString &str)
 {
     if (ui->widget->selectedEdge != nullptr) {
@@ -253,6 +264,7 @@ void MainWindow::on_openFromFile_triggered()
 
         GraphReader in(file);
         ui->widget->SetGraph(in.readFromFile());
+        setDirectedGraph(ui->widget->GetGraph().directed);
 
         file.close();
     }
@@ -295,4 +307,15 @@ void MainWindow::setBeginEndBtnsState()
             ui->btn_markEnd->setChecked(false);
         }
     }
+}
+
+void MainWindow::on_btn_clearAll_clicked()
+{
+    ui->widget->clearInternalState();
+    ui->widget->SetGraph(Graph());
+}
+
+void MainWindow::on_directedGraph_stateChanged(int state)
+{
+    ui->widget->GetGraph().directed = (state == Qt::Checked);
 }
