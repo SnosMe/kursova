@@ -70,6 +70,7 @@ void MainWindow::on_widget_nodeSelectionLoss()
 
     ui->btn_markBegin->setEnabled(false);
     ui->btn_markEnd->setEnabled(false);
+    setBeginEndBtnsState();
 }
 
 void MainWindow::on_btn_firstState_clicked()
@@ -270,19 +271,27 @@ void MainWindow::on_btn_markEnd_clicked()
 
 void MainWindow::setBeginEndBtnsState()
 {
-    if (ui->widget->GetGraph().begin == ui->widget->selectedNode)
-    {
-        ui->btn_markBegin->setChecked(true);
-        ui->btn_markEnd->setChecked(false);
-    }
-    else if (ui->widget->GetGraph().end == ui->widget->selectedNode)
+    if (ui->widget->selectedNode == nullptr)
     {
         ui->btn_markBegin->setChecked(false);
-        ui->btn_markEnd->setChecked(true);
+        ui->btn_markEnd->setChecked(false);
     }
     else
     {
-        ui->btn_markBegin->setChecked(false);
-        ui->btn_markEnd->setChecked(false);
+        if (ui->widget->GetGraph().begin == ui->widget->selectedNode)
+        {
+            ui->btn_markBegin->setChecked(true);
+            ui->btn_markEnd->setChecked(false);
+        }
+        else if (ui->widget->GetGraph().end == ui->widget->selectedNode)
+        {
+            ui->btn_markBegin->setChecked(false);
+            ui->btn_markEnd->setChecked(true);
+        }
+        else
+        {
+            ui->btn_markBegin->setChecked(false);
+            ui->btn_markEnd->setChecked(false);
+        }
     }
 }

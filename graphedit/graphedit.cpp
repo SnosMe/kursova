@@ -96,7 +96,15 @@ void GraphEdit::paintEvent(QPaintEvent*)
         }
         else
         {
-            p.setPen(QPen(QColor(33, 33, 33), 1.0));
+            if (g.begin == &g.nodes[i] ||
+                g.end == &g.nodes[i])
+            {
+                p.setPen(QPen(QColor(33, 33, 33), 2.0, Qt::DashDotDotLine));
+            }
+            else
+            {
+                p.setPen(QPen(QColor(33, 33, 33), 1.0));
+            }
             p.setBrush(QBrush(QColor(255, 255, 255)));
         }
 

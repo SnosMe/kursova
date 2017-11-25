@@ -31,16 +31,12 @@ private slots:
     void on_btn_lastState_clicked();
 
     void on_btn_dijkstra_clicked();
-
-
     void on_btn_editGraph_clicked();
 
     void on_saveToFile_triggered();
-
     void on_openFromFile_triggered();
 
     void on_btn_markBegin_clicked();
-
     void on_btn_markEnd_clicked();
 
 private:
