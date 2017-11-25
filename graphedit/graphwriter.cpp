@@ -31,6 +31,21 @@ void GraphWriter::writeToFile()
     writeNodes();
     writeEdges();
 
+    if (g.begin != nullptr)
+    {
+        writer->writeStartElement("data");
+        writer->writeAttribute("key", "beginNode");
+        writer->writeCharacters(QString::number(g.begin->id));
+        writer->writeEndElement();
+    }
+    if (g.end != nullptr)
+    {
+        writer->writeStartElement("data");
+        writer->writeAttribute("key", "endNode");
+        writer->writeCharacters(QString::number(g.end->id));
+        writer->writeEndElement();
+    }
+
     writer->writeEndDocument();
 }
 
@@ -54,6 +69,20 @@ void GraphWriter::writeKeys()
     writer->writeAttribute("id", "weight");
     writer->writeAttribute("for", "edge");
     writer->writeAttribute("attr.name", "weight");
+    writer->writeAttribute("attr.type", "int");
+    writer->writeEndElement();
+
+    writer->writeStartElement("key");
+    writer->writeAttribute("id", "beginNode");
+    writer->writeAttribute("for", "graph");
+    writer->writeAttribute("attr.name", "beginNode");
+    writer->writeAttribute("attr.type", "int");
+    writer->writeEndElement();
+
+    writer->writeStartElement("key");
+    writer->writeAttribute("id", "endNode");
+    writer->writeAttribute("for", "graph");
+    writer->writeAttribute("attr.name", "endNode");
     writer->writeAttribute("attr.type", "int");
     writer->writeEndElement();
 }

@@ -15,6 +15,19 @@ Graph& GraphReader::readFromFile()
         else if (reader.name() == "edge") {
             readEdge();
         }
+        else if (reader.name() == "data") {
+            for(QXmlStreamAttribute& attr : reader.attributes())
+            {
+                if (attr.name() == "key") {
+                    if (attr.value() == "beginNode") {
+                        g.begin = g.GetNodeByID(reader.readElementText().toInt());
+                    }
+                    if (attr.value() == "endNode") {
+                        g.end = g.GetNodeByID(reader.readElementText().toInt());
+                    }
+                }
+            }
+        }
         else if (reader.name() != "graph" &&
                  reader.name() != "graphml") {
             reader.skipCurrentElement();

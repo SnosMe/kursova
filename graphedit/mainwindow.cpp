@@ -118,6 +118,7 @@ void MainWindow::on_btn_dijkstra_clicked()
 {
         states.clear();
 
+        ui->widget->clearInternalState();
         Graph gCopy = ui->widget->GetGraph();
         states.append(gCopy); // add graph at [0] as original
 

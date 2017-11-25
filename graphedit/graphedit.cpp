@@ -496,6 +496,8 @@ void GraphEdit::clearInternalState()
     mode = MODE_NONE;
     selectedEdge = nullptr;
     selectedNode = nullptr;
+    emit edgeSelectionLoss();
+    emit nodeSelectionLoss();
     // from, to = ;
 }
 
