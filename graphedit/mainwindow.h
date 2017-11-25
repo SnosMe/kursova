@@ -39,10 +39,15 @@ private slots:
 
     void on_openFromFile_triggered();
 
+    void on_btn_markBegin_clicked();
+
+    void on_btn_markEnd_clicked();
+
 private:
     Ui::MainWindow *ui;
     QList<Graph> states;
     int stateIdx;
+    void setBeginEndBtnsState();
 };
 
 #endif // MAINWINDOW_H

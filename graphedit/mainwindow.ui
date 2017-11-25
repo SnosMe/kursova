@@ -104,7 +104,10 @@ color: #707070;
           <property name="styleSheet">
            <string notr="true">font: 12pt &quot;Segoe UI&quot;;</string>
           </property>
-          <layout class="QGridLayout" name="gridLayout_2">
+          <layout class="QVBoxLayout" name="verticalLayout_2">
+           <property name="spacing">
+            <number>8</number>
+           </property>
            <property name="leftMargin">
             <number>16</number>
            </property>
@@ -117,33 +120,20 @@ color: #707070;
            <property name="bottomMargin">
             <number>16</number>
            </property>
-           <property name="spacing">
-            <number>8</number>
-           </property>
-           <item row="0" column="0">
-            <widget class="QPushButton" name="pushButton">
-             <property name="cursor">
-              <cursorShape>PointingHandCursor</cursorShape>
+           <item>
+            <widget class="QLineEdit" name="lineEdit">
+             <property name="enabled">
+              <bool>false</bool>
              </property>
-             <property name="text">
-              <string>Очистити</string>
+             <property name="styleSheet">
+              <string notr="true"/>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
              </property>
             </widget>
            </item>
-           <item row="3" column="0">
-            <spacer name="verticalSpacer_2">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item row="2" column="0">
+           <item>
             <widget class="QCheckBox" name="autoConnectNodes">
              <property name="palette">
               <palette>
@@ -324,6 +314,7 @@ color: #707070;
               <string notr="true">QCheckBox {
 color: #f5f5f5;
 font-size: 14px;
+padding: 4px 0;
 }
 
 QCheckBox::indicator {
@@ -348,20 +339,121 @@ QCheckBox::indicator:checked {
              </property>
             </widget>
            </item>
-           <item row="1" column="0">
-            <widget class="QLineEdit" name="lineEdit">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
+           <item>
+            <widget class="QWidget" name="widget_4" native="true">
              <property name="styleSheet">
-              <string notr="true"/>
+              <string notr="true">QPushButton:checked {
+background: #212121;
+}
+</string>
              </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
+             <layout class="QHBoxLayout" name="horizontalLayout_2">
+              <property name="spacing">
+               <number>0</number>
+              </property>
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
+              <item>
+               <widget class="QPushButton" name="btn_markBegin">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>Segoe UI</family>
+                  <pointsize>12</pointsize>
+                  <weight>50</weight>
+                  <italic>false</italic>
+                  <bold>false</bold>
+                  <stylestrategy>PreferAntialias</stylestrategy>
+                 </font>
+                </property>
+                <property name="cursor">
+                 <cursorShape>PointingHandCursor</cursorShape>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+border-top-left-radius: 3px;
+border-top-right-radius: 0;
+border-bottom-right-radius: 0;
+border-bottom-left-radius: 3px;
+}</string>
+                </property>
+                <property name="text">
+                 <string>Початок</string>
+                </property>
+                <property name="checkable">
+                 <bool>true</bool>
+                </property>
+                <property name="checked">
+                 <bool>false</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="btn_markEnd">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="cursor">
+                 <cursorShape>PointingHandCursor</cursorShape>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+border-top-left-radius: 0;
+border-top-right-radius: 3px;
+border-bottom-right-radius: 3px;
+border-bottom-left-radius: 0;
+}</string>
+                </property>
+                <property name="text">
+                 <string>Кінець</string>
+                </property>
+                <property name="checkable">
+                 <bool>true</bool>
+                </property>
+                <property name="checked">
+                 <bool>false</bool>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButton">
+             <property name="cursor">
+              <cursorShape>PointingHandCursor</cursorShape>
+             </property>
+             <property name="text">
+              <string>Очистити граф</string>
              </property>
             </widget>
            </item>
-           <item row="4" column="0">
+           <item>
+            <spacer name="verticalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
             <widget class="QPushButton" name="btn_dijkstra">
              <property name="cursor">
               <cursorShape>PointingHandCursor</cursorShape>
@@ -549,14 +641,14 @@ font-size: 14px;
    </property>
    <widget class="QMenu" name="menu">
     <property name="title">
-     <string>Файл</string>
+     <string>&amp;Файл</string>
     </property>
     <addaction name="saveToFile"/>
     <addaction name="openFromFile"/>
    </widget>
    <widget class="QMenu" name="menu_2">
     <property name="title">
-     <string>Допомога</string>
+     <string>&amp;Допомога</string>
     </property>
     <addaction name="action_3"/>
     <addaction name="action_4"/>
@@ -566,22 +658,28 @@ font-size: 14px;
   </widget>
   <action name="saveToFile">
    <property name="text">
-    <string>Зберегти</string>
+    <string>&amp;Зберегти...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
    </property>
   </action>
   <action name="openFromFile">
    <property name="text">
-    <string>Відкрити</string>
+    <string>&amp;Відкрити...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
    </property>
   </action>
   <action name="action_3">
    <property name="text">
-    <string>Справка</string>
+    <string>&amp;Справка</string>
    </property>
   </action>
   <action name="action_4">
    <property name="text">
-    <string>Розробники</string>
+    <string>&amp;Розробники</string>
    </property>
   </action>
  </widget>

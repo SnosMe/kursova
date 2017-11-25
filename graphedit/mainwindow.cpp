@@ -52,6 +52,10 @@ void MainWindow::on_widget_nodeSelected(GraphNode* node)
     ui->lineEdit->setEnabled(true);
     ui->lineEdit->setFocus();
     ui->lineEdit->selectAll();
+
+    ui->btn_markBegin->setEnabled(true);
+    ui->btn_markEnd->setEnabled(true);
+    setBeginEndBtnsState();
 }
 
 void MainWindow::on_widget_edgeSelectionLoss()
@@ -63,6 +67,9 @@ void MainWindow::on_widget_edgeSelectionLoss()
 void MainWindow::on_widget_nodeSelectionLoss()
 {
     on_widget_edgeSelectionLoss();
+
+    ui->btn_markBegin->setEnabled(false);
+    ui->btn_markEnd->setEnabled(false);
 }
 
 void MainWindow::on_btn_firstState_clicked()
@@ -115,7 +122,7 @@ void MainWindow::on_btn_dijkstra_clicked()
 
         QVector<DijkstraGraph> dGraphArr;
         DijkstraGraph dGraph = DijkstraGraph();
-        GraphNode* startVert = &gCopy.nodes[0];
+        GraphNode* startVert = gCopy.begin;
 
         GraphEdge* edge = gCopy.getLowestEdge(gCopy.GetIncidentEdges(startVert))[0];
         GraphNode* end = (edge->node1 == startVert) ? edge->node2 : edge->node1;
@@ -139,10 +146,10 @@ void MainWindow::on_btn_dijkstra_clicked()
             GraphEdge* lowestEdge = nullptr;
             int lowestLength = INT_MAX;
             DijkstraGraph* foundInGraph = nullptr;
-            for (auto& dGraph : dGraphArr) {
-                for (auto node : dGraph.nodes) {
+            for (DijkstraGraph& dGraph : dGraphArr) {
+                for (GraphNode* node : dGraph.nodes) {
                     QVector<GraphEdge*> edges = gCopy.getLowestEdge(gCopy.GetIncidentEdges(node));
-                    for (auto edge : edges) {
+                    for (GraphEdge* edge : edges) {
                         if (edge->node1->existInTrees && edge->node2->existInTrees)
                             continue;
                         int pathLen = (edge->node1->length) ? (edge->node1->length + edge->w) : (edge->node2->length + edge->w);
@@ -185,7 +192,7 @@ void MainWindow::on_btn_dijkstra_clicked()
             states.append(gCopy);
 
             qDebug() << ": (" << lowestEdge->node1->id << ", " << lowestEdge->node2->id << ")\n";
-            if (end == &gCopy.nodes.last()) {
+            if (end == gCopy.end) {
                 GraphNode* prev = nullptr;
                 for (auto node : foundInGraph->nodes) {
                     gCopy.GetNodeByID(node->id)->color = ColorMode::GREEN;
@@ -246,5 +253,36 @@ void MainWindow::on_openFromFile_triggered()
         ui->widget->SetGraph(in.readFromFile());
 
         file.close();
+    }
+}
+
+void MainWindow::on_btn_markBegin_clicked()
+{
+    ui->widget->GetGraph().setBeginNode(ui->widget->selectedNode);
+    setBeginEndBtnsState();
+}
+
+void MainWindow::on_btn_markEnd_clicked()
+{
+    ui->widget->GetGraph().setEndNode(ui->widget->selectedNode);
+    setBeginEndBtnsState();
+}
+
+void MainWindow::setBeginEndBtnsState()
+{
+    if (ui->widget->GetGraph().begin == ui->widget->selectedNode)
+    {
+        ui->btn_markBegin->setChecked(true);
+        ui->btn_markEnd->setChecked(false);
+    }
+    else if (ui->widget->GetGraph().end == ui->widget->selectedNode)
+    {
+        ui->btn_markBegin->setChecked(false);
+        ui->btn_markEnd->setChecked(true);
+    }
+    else
+    {
+        ui->btn_markBegin->setChecked(false);
+        ui->btn_markEnd->setChecked(false);
     }
 }

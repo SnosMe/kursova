@@ -155,6 +155,22 @@ GraphNode* Graph::GetNodeByID(int id)
     return nullptr;
 }
 
+void Graph::setBeginNode(GraphNode* node)
+{
+    begin = node;
+    if (end == begin) {
+        end = nullptr;
+    }
+}
+
+void Graph::setEndNode(GraphNode* node)
+{
+    end = node;
+    if (begin == end) {
+        begin = nullptr;
+    }
+}
+
 void Graph::printNodes()
 {
     for (int i = 0; i < nodes.length(); i++)

@@ -64,6 +64,8 @@ struct Graph
 {
     QList<GraphNode> nodes;
     QVector<GraphEdge> edges;
+    GraphNode* begin;
+    GraphNode* end;
 
     bool AddNode(float x = 0.5, float y = 0.5, int id = 0);
     bool AddEdge(GraphNode* a, GraphNode* b, int w);
@@ -73,20 +75,38 @@ struct Graph
     QVector<GraphEdge*> GetIncidentEdges(GraphNode* node);
     QVector<GraphEdge*> getLowestEdge(QVector<GraphEdge*> edges);
     GraphNode* GetNodeByID(int);
+    void setBeginNode(GraphNode* node);
+    void setEndNode(GraphNode* node);
 
     void printNodes();
 
-    Graph() {}
+    Graph()
+    {
+        begin = nullptr;
+        end = nullptr;
+    }
 
     Graph(const Graph& src)
     {
         qDebug() << "Graph::CopyCtor()";
+        *this = src;
+    }
+
+    Graph& operator=(const Graph& src)
+    {
+        qDebug() << "Graph::operator=";
         nodes = src.nodes;
         edges = src.edges;
+
+        begin = (src.begin != nullptr) ? GetNodeByID(src.begin->id) : nullptr;
+        end = (src.end != nullptr) ? GetNodeByID(src.end->id) : nullptr;
+
         for (auto& edge : edges) {
             edge.node1 = GetNodeByID(edge.node1->id);
             edge.node2 = GetNodeByID(edge.node2->id);
         }
+
+        return *this;
     }
 };
 

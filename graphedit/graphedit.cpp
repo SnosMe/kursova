@@ -471,13 +471,14 @@ bool GraphEdit::AddNode(int x, int y)
     return true;
 }
 
-Graph& GraphEdit::GetGraph()
+Graph &GraphEdit::GetGraph()
 {
     return g;
 }
 
 void GraphEdit::SetGraph(const Graph& src)
 {
+    qDebug() << "Must be copied";
     g = src;
     update();
 }
