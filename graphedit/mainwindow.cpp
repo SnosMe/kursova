@@ -5,6 +5,7 @@
 #include "ui_mainwindow.h"
 #include "dijkstra.h"
 #include "graphwriter.h"
+#include "graphreader.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -223,10 +224,26 @@ void MainWindow::on_saveToFile_triggered()
     if (!fileName.isEmpty())
     {
         QFile file(fileName);
-        file.open(QIODevice::WriteOnly);
+        file.open(QFile::WriteOnly);
 
         GraphWriter out(ui->widget->GetGraph(), file);
         out.writeToFile();
+
+        file.close();
+    }
+}
+
+void MainWindow::on_openFromFile_triggered()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, "Відкрити GraphML", "", "GraphML (*.graphml)");
+
+    if (!fileName.isEmpty())
+    {
+        QFile file(fileName);
+        file.open(QFile::ReadOnly | QFile::Text);
+
+        GraphReader in(file);
+        ui->widget->SetGraph(in.readFromFile());
 
         file.close();
     }

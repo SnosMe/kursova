@@ -476,7 +476,7 @@ Graph& GraphEdit::GetGraph()
     return g;
 }
 
-void GraphEdit::SetGraph(Graph src)
+void GraphEdit::SetGraph(const Graph& src)
 {
     g = src;
     update();

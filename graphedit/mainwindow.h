@@ -37,6 +37,8 @@ private slots:
 
     void on_saveToFile_triggered();
 
+    void on_openFromFile_triggered();
+
 private:
     Ui::MainWindow *ui;
     QList<Graph> states;

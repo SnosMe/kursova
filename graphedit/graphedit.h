@@ -31,7 +31,7 @@ public:
     GraphEdge*          selectedEdge;
 
     Graph& GetGraph();
-    void SetGraph(Graph);
+    void SetGraph(const Graph &);
     void clearInternalState();
 
 signals:

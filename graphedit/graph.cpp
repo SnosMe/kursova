@@ -33,9 +33,9 @@ bool Graph::AddNode(float x, float y, int id)
         }
     }
 
-    GraphNode nd(id, x, y);
+    GraphNode node(id, x, y);
 
-    nodes.append(nd);
+    nodes.append(node);
 
     return true;
 }

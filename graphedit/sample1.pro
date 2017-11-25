@@ -16,13 +16,15 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     graphedit.cpp \
     graph.cpp \
-    graphwriter.cpp
+    graphwriter.cpp \
+    graphreader.cpp
 
 HEADERS  += mainwindow.h \
     graphedit.h \
     graph.h \
     dijkstra.h \
-    graphwriter.h
+    graphwriter.h \
+    graphreader.h
 
 FORMS    += mainwindow.ui
 

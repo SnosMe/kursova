@@ -15,9 +15,6 @@ public:
       GraphWriter(const Graph& g, QIODevice& device);
       ~GraphWriter();
       void writeToFile();
-
-private:
-
 };
 
 #endif // GRAPHWRITER_H
