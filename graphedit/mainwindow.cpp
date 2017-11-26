@@ -336,6 +336,6 @@ void MainWindow::on_btn_bgImage_clicked()
         painter.setOpacity(0.1);
         painter.drawImage(QRect(0, 0, original.width(), original.height()), original);
 
-        ui->widget->bgImage = newImg;
+        ui->graphBg->bgImage = newImg;
     }
 }

@@ -793,7 +793,7 @@ font-size: 14px;
      </widget>
     </item>
     <item>
-     <widget class="QWidget" name="graphBg" native="true">
+     <widget class="GraphBackground" name="graphBg" native="true">
       <property name="styleSheet">
        <string notr="true"/>
       </property>
@@ -911,6 +911,11 @@ font-size: 14px;
     <signal>edgeSelectionLoss()</signal>
     <signal>edgeSelected(GraphEdge*)</signal>
    </slots>
+  </customwidget>
+  <customwidget>
+   <class>GraphBackground</class>
+   <extends>QWidget</extends>
+   <header>graphbackground.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
