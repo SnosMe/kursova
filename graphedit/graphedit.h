@@ -29,6 +29,7 @@ public:
     bool AddNode(int x, int y);
     GraphNode*          selectedNode;
     GraphEdge*          selectedEdge;
+    QImage bgImage;
 
     Graph& GetGraph();
     void SetGraph(const Graph &);

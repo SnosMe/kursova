@@ -45,6 +45,8 @@ private slots:
 
     void on_directedGraph_stateChanged(int state);
 
+    void on_btn_bgImage_clicked();
+
 private:
     Ui::MainWindow *ui;
     QList<Graph> states;

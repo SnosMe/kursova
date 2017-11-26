@@ -134,7 +134,7 @@ void MainWindow::on_btn_dijkstra_clicked()
         states.append(gCopy); // add graph at [0] as original
 
         QVector<DijkstraGraph> dGraphArr;
-        DijkstraGraph dGraph = DijkstraGraph();
+        DijkstraGraph dGraph;
         GraphNode* startVert = gCopy.begin;
 
         GraphEdge* edge = gCopy.getLowestEdge(gCopy.GetIncidentEdges(startVert))[0];
@@ -318,4 +318,24 @@ void MainWindow::on_btn_clearAll_clicked()
 void MainWindow::on_directedGraph_stateChanged(int state)
 {
     ui->widget->GetGraph().directed = (state == Qt::Checked);
+}
+
+void MainWindow::on_btn_bgImage_clicked()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, "Відкрити зображення", "", "Файли зображень (*.png *.jpg *.bmp)");
+
+    if (!fileName.isEmpty())
+    {
+        QImage original(fileName);
+        original = original.convertToFormat(QImage::Format_ARGB32);
+
+        QImage newImg(original.size(), QImage::Format_ARGB32);
+        newImg.fill(Qt::transparent);
+
+        QPainter painter(&newImg);
+        painter.setOpacity(0.1);
+        painter.drawImage(QRect(0, 0, original.width(), original.height()), original);
+
+        ui->widget->bgImage = newImg;
+    }
 }

@@ -27,6 +27,10 @@ void GraphEdit::paintEvent(QPaintEvent*)
 
     QPainter p(this);
 
+    if (!bgImage.isNull()) {
+        p.drawImage(QPoint(0, 0), bgImage.scaled(this->size(), Qt::KeepAspectRatioByExpanding));
+    }
+
     p.setRenderHints(QPainter::Antialiasing);
     p.setFont(QFont("Consolas", 10));
 
