@@ -339,3 +339,54 @@ void MainWindow::on_btn_bgImage_clicked()
         ui->graphBg->bgImage = newImg;
     }
 }
+
+void MainWindow::on_btn_primAlgo_clicked()
+{
+    // Common
+    states.clear();
+
+    ui->widget->clearInternalState();
+    Graph gCopy = ui->widget->GetGraph();
+    states.append(gCopy); // add graph at [0] as original
+
+    // Begin
+    for (GraphEdge* edge : gCopy.getLowestEdge())
+    {
+        edge->node1->existInTrees = true;
+        edge->node2->existInTrees = true;
+        edge->node1->color = ColorMode::BOLD;
+        edge->node2->color = ColorMode::BOLD;
+        edge->color = ColorMode::BOLD;
+    }
+    states.append(gCopy);
+
+        // Loop algo
+        for (int i = 0; i < gCopy.nodes.size(); i++) {
+            GraphEdge* lowestEdge = nullptr;
+            for (GraphNode& node : gCopy.nodes) {
+                if (!node.existInTrees) continue;
+                for (GraphEdge* edge : gCopy.getLowestEdge(gCopy.GetIncidentEdges(&node))) {
+                    if (edge->node1->existInTrees && edge->node2->existInTrees)
+                        continue;
+                    else if (lowestEdge == nullptr)
+                        lowestEdge = edge;
+                    else if (edge->w < lowestEdge->w)
+                        lowestEdge = edge;
+                }
+            }
+            if (lowestEdge != nullptr) {
+                lowestEdge->node1->existInTrees = true;
+                lowestEdge->node2->existInTrees = true;
+                lowestEdge->node1->color = ColorMode::BOLD;
+                lowestEdge->node2->color = ColorMode::BOLD;
+                lowestEdge->color = ColorMode::BOLD;
+                states.append(gCopy);
+            }
+        }
+
+    // common end
+        stateIdx = 1;
+        ui->widget->SetGraph(states[stateIdx]);
+        ui->widget->update();
+        ui->toolsWidget->setCurrentWidget(ui->viewTools);
+}

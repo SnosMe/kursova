@@ -670,6 +670,16 @@ border-bottom-left-radius: 0;
             </spacer>
            </item>
            <item>
+            <widget class="QPushButton" name="btn_primAlgo">
+             <property name="cursor">
+              <cursorShape>PointingHandCursor</cursorShape>
+             </property>
+             <property name="text">
+              <string>Алгоритм Прима</string>
+             </property>
+            </widget>
+           </item>
+           <item>
             <widget class="QPushButton" name="btn_dijkstra">
              <property name="cursor">
               <cursorShape>PointingHandCursor</cursorShape>

@@ -6,11 +6,29 @@ QVector<GraphEdge*> Graph::getLowestEdge(QVector<GraphEdge*> edges)
 {
     QVector<GraphEdge*> ret;
     GraphEdge* lowest = nullptr;
-    for (auto edge : edges) {
+    for (GraphEdge* edge : edges) {
         if (!(edge->node1->existInTrees && edge->node2->existInTrees) &&
             ((lowest == nullptr) || (edge->w <= lowest->w)))
         {
             lowest = edge;
+        }
+    }
+
+    if (lowest != nullptr) {
+        ret.append(lowest);
+    }
+    return ret;
+}
+
+QVector<GraphEdge*> Graph::getLowestEdge()
+{
+    QVector<GraphEdge*> ret;
+    GraphEdge* lowest = nullptr;
+    for (GraphEdge& edge : edges) {
+        if (!(edge.node1->existInTrees && edge.node2->existInTrees) &&
+            ((lowest == nullptr) || (edge.w <= lowest->w)))
+        {
+            lowest = &edge;
         }
     }
 
