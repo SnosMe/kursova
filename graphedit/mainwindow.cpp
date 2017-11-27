@@ -1,6 +1,8 @@
 #include <QStack>
 #include <QDebug>
 #include <QFileDialog>
+#include <QtAlgorithms>
+#include <QHash>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "dijkstra.h"
@@ -350,14 +352,12 @@ void MainWindow::on_btn_primAlgo_clicked()
     states.append(gCopy); // add graph at [0] as original
 
     // Begin
-    for (GraphEdge* edge : gCopy.getLowestEdge())
-    {
-        edge->node1->existInTrees = true;
-        edge->node2->existInTrees = true;
-        edge->node1->color = ColorMode::BOLD;
-        edge->node2->color = ColorMode::BOLD;
-        edge->color = ColorMode::BOLD;
-    }
+    GraphEdge* firstEdge = gCopy.getLowestEdge()[0];
+    firstEdge->node1->existInTrees = true;
+    firstEdge->node2->existInTrees = true;
+    firstEdge->node1->color = ColorMode::BOLD;
+    firstEdge->node2->color = ColorMode::BOLD;
+    firstEdge->color = ColorMode::BOLD;
     states.append(gCopy);
 
         // Loop algo
@@ -383,6 +383,64 @@ void MainWindow::on_btn_primAlgo_clicked()
                 states.append(gCopy);
             }
         }
+
+    // common end
+        stateIdx = 1;
+        ui->widget->SetGraph(states[stateIdx]);
+        ui->widget->update();
+        ui->toolsWidget->setCurrentWidget(ui->viewTools);
+}
+
+void MainWindow::on_btn_kruskalAlgo_clicked()
+{
+    // Common
+    states.clear();
+
+    ui->widget->clearInternalState();
+    Graph gCopy = ui->widget->GetGraph();
+    states.append(gCopy); // add graph at [0] as original
+
+    // algo
+    int m = gCopy.edges.size();
+    int n = gCopy.nodes.size();
+
+    QVector<GraphEdge*> g;
+    for (GraphEdge& edge : gCopy.edges)
+        g.append(&edge);
+
+    qSort(g.begin(), g.end(), GraphEdge::lessThan);
+
+    QHash<GraphNode*, int> tree_id;
+    for (int i=0; i<n; ++i)
+        tree_id.insert(&gCopy.nodes[i], i);
+
+    for (int i=0; i<m; ++i)
+    {
+        GraphNode* a = g[i]->node1;
+        GraphNode* b = g[i]->node2;
+
+        if (tree_id.value(a) != tree_id.value(b))
+        {
+            g[i]->node1->existInTrees = true;
+            g[i]->node2->existInTrees = true;
+            g[i]->node1->color = ColorMode::BOLD;
+            g[i]->node2->color = ColorMode::BOLD;
+            g[i]->color = ColorMode::BOLD;
+            states.append(gCopy);
+
+            int old_id = tree_id.value(b);
+            int new_id = tree_id.value(a);
+            QMutableHashIterator<GraphNode*, int> j(tree_id);
+            while (j.hasNext())
+            {
+                j.next();
+                if (j.value() == old_id)
+                {
+                    j.value() = new_id;
+                }
+            }
+        }
+    }
 
     // common end
         stateIdx = 1;

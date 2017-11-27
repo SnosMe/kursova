@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>949</width>
-    <height>487</height>
+    <width>1081</width>
+    <height>535</height>
    </rect>
   </property>
   <property name="font">
@@ -680,6 +680,16 @@ border-bottom-left-radius: 0;
             </widget>
            </item>
            <item>
+            <widget class="QPushButton" name="btn_kruskalAlgo">
+             <property name="cursor">
+              <cursorShape>PointingHandCursor</cursorShape>
+             </property>
+             <property name="text">
+              <string>Алгоритм Краскала</string>
+             </property>
+            </widget>
+           </item>
+           <item>
             <widget class="QPushButton" name="btn_dijkstra">
              <property name="cursor">
               <cursorShape>PointingHandCursor</cursorShape>
@@ -852,7 +862,7 @@ font-size: 14px;
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>949</width>
+     <width>1081</width>
      <height>23</height>
     </rect>
    </property>

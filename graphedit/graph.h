@@ -40,8 +40,6 @@ struct GraphEdge
 {
     GraphNode* node1;
     GraphNode* node2;
-    // int node1;
-    // int node2;
     int w;
     ColorMode color;
 
@@ -53,10 +51,15 @@ struct GraphEdge
         this->color = color;
     }
 
-    ~GraphEdge ()
+    /* ~GraphEdge ()
     {
-        // delete n1; - managed by QVector
-        // delete n2; - managed by QVector
+        delete node1; - managed by QVector; never uncomment
+        delete node2; - managed by QVector
+    } */
+
+    static bool lessThan(const GraphEdge* e1, const GraphEdge* e2)
+    {
+        return e1->w < e2->w;
     }
 };
 
