@@ -6,7 +6,7 @@
 #include "graphedit.h"
 
 namespace Ui {
-class MainWindow;
+    class MainWindow;
 }
 
 class MainWindow : public QMainWindow
@@ -50,6 +50,8 @@ private slots:
     void on_btn_primAlgo_clicked();
 
     void on_btn_kruskalAlgo_clicked();
+
+    void on_btn_fordaAlgo_clicked();
 
 private:
     Ui::MainWindow *ui;

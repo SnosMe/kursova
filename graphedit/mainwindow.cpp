@@ -8,6 +8,7 @@
 #include "dijkstra.h"
 #include "graphwriter.h"
 #include "graphreader.h"
+#include "fordfulkerson.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -441,6 +442,25 @@ void MainWindow::on_btn_kruskalAlgo_clicked()
             }
         }
     }
+
+    // common end
+        stateIdx = 1;
+        ui->widget->SetGraph(states[stateIdx]);
+        ui->widget->update();
+        ui->toolsWidget->setCurrentWidget(ui->viewTools);
+}
+
+void MainWindow::on_btn_fordaAlgo_clicked()
+{
+    // Common
+    states.clear();
+
+    ui->widget->clearInternalState();
+    Graph gCopy = ui->widget->GetGraph();
+    states.append(gCopy); // add graph at [0] as original
+
+    states.append(gCopy); // TODO: delete this line after UI done
+    FordFulkerson run(&states);
 
     // common end
         stateIdx = 1;

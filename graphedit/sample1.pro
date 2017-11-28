@@ -18,7 +18,8 @@ SOURCES += main.cpp\
     graph.cpp \
     graphwriter.cpp \
     graphreader.cpp \
-    graphbackground.cpp
+    graphbackground.cpp \
+    fordfulkerson.cpp
 
 HEADERS  += mainwindow.h \
     graphedit.h \
@@ -26,7 +27,8 @@ HEADERS  += mainwindow.h \
     dijkstra.h \
     graphwriter.h \
     graphreader.h \
-    graphbackground.h
+    graphbackground.h \
+    fordfulkerson.h
 
 FORMS    += mainwindow.ui
 
