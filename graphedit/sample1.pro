@@ -16,19 +16,19 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     graphedit.cpp \
     graph.cpp \
-    graphwriter.cpp \
-    graphreader.cpp \
+    io/graphwriter.cpp \
+    io/graphreader.cpp \
     graphbackground.cpp \
-    fordfulkerson.cpp
+	algorithm/fordfulkerson.cpp \
 
 HEADERS  += mainwindow.h \
     graphedit.h \
     graph.h \
-    dijkstra.h \
-    graphwriter.h \
-    graphreader.h \
+    io/graphwriter.h \
+    io/graphreader.h \
     graphbackground.h \
-    fordfulkerson.h
+	algorithm/dijkstra.h \
+	algorithm/fordfulkerson.h \
 
 FORMS    += mainwindow.ui
 

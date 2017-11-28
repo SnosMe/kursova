@@ -5,10 +5,10 @@
 #include <QHash>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "dijkstra.h"
-#include "graphwriter.h"
-#include "graphreader.h"
-#include "fordfulkerson.h"
+#include "algorithm/dijkstra.h"
+#include "io/graphwriter.h"
+#include "io/graphreader.h"
+#include "algorithm/fordfulkerson.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -312,6 +312,24 @@ void MainWindow::setBeginEndBtnsState()
     }
 }
 
+void MainWindow::beforeAlgorithm()
+{
+    states.clear();
+    ui->widget->clearInternalState();
+    qDebug() << "mustCOPY !!";
+    // Graph gCopy = ui->widget->GetGraph();
+    states.append(ui->widget->GetGraph()); // add graph at [0] as original
+    qDebug() << "mustCOPY END";
+}
+
+void MainWindow::afterAlgorithm()
+{
+    stateIdx = 1;
+    ui->widget->SetGraph(states[stateIdx]);
+    ui->widget->update();
+    ui->toolsWidget->setCurrentWidget(ui->viewTools);
+}
+
 void MainWindow::on_btn_clearAll_clicked()
 {
     ui->widget->clearInternalState();
@@ -345,14 +363,9 @@ void MainWindow::on_btn_bgImage_clicked()
 
 void MainWindow::on_btn_primAlgo_clicked()
 {
-    // Common
-    states.clear();
+    beforeAlgorithm();
 
-    ui->widget->clearInternalState();
     Graph gCopy = ui->widget->GetGraph();
-    states.append(gCopy); // add graph at [0] as original
-
-    // Begin
     GraphEdge* firstEdge = gCopy.getLowestEdge()[0];
     firstEdge->node1->existInTrees = true;
     firstEdge->node2->existInTrees = true;
@@ -385,22 +398,14 @@ void MainWindow::on_btn_primAlgo_clicked()
             }
         }
 
-    // common end
-        stateIdx = 1;
-        ui->widget->SetGraph(states[stateIdx]);
-        ui->widget->update();
-        ui->toolsWidget->setCurrentWidget(ui->viewTools);
+    afterAlgorithm();
 }
 
 void MainWindow::on_btn_kruskalAlgo_clicked()
 {
-    // Common
-    states.clear();
+    beforeAlgorithm();
 
-    ui->widget->clearInternalState();
     Graph gCopy = ui->widget->GetGraph();
-    states.append(gCopy); // add graph at [0] as original
-
     // algo
     int m = gCopy.edges.size();
     int n = gCopy.nodes.size();
@@ -443,28 +448,15 @@ void MainWindow::on_btn_kruskalAlgo_clicked()
         }
     }
 
-    // common end
-        stateIdx = 1;
-        ui->widget->SetGraph(states[stateIdx]);
-        ui->widget->update();
-        ui->toolsWidget->setCurrentWidget(ui->viewTools);
+    afterAlgorithm();
 }
 
 void MainWindow::on_btn_fordaAlgo_clicked()
 {
-    // Common
-    states.clear();
+    beforeAlgorithm();
 
-    ui->widget->clearInternalState();
-    Graph gCopy = ui->widget->GetGraph();
-    states.append(gCopy); // add graph at [0] as original
-
-    states.append(gCopy); // TODO: delete this line after UI done
+    states.append(states[0]); // TODO: delete this line after UI done
     FordFulkerson run(&states);
 
-    // common end
-        stateIdx = 1;
-        ui->widget->SetGraph(states[stateIdx]);
-        ui->widget->update();
-        ui->toolsWidget->setCurrentWidget(ui->viewTools);
+    afterAlgorithm();
 }

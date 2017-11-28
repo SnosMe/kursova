@@ -58,6 +58,8 @@ private:
     QList<Graph> states;
     int stateIdx;
     void setBeginEndBtnsState();
+    void beforeAlgorithm();
+    void afterAlgorithm();
 };
 
 #endif // MAINWINDOW_H
