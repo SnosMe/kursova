@@ -1,9 +1,8 @@
-#include "fordfulkerson.h"
+#include "../algorithm/fordfulkerson.h"
 
 FordFulkerson::FordFulkerson(QList<Graph> *states)
+    : Algorithm(states)
 {
-    this->states = states;
-    gCopy = (*states)[0];
     n = gCopy.nodes.size();
     head = tail = 0;
 
@@ -45,6 +44,12 @@ FordFulkerson::~FordFulkerson()
 
     delete[] capacity;
     delete[] flow;
+}
+
+bool FordFulkerson::run()
+{
+    // TODO
+    return false;
 }
 
 void FordFulkerson::enqueue(int x)

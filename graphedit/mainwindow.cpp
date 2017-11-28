@@ -9,6 +9,7 @@
 #include "io/graphwriter.h"
 #include "io/graphreader.h"
 #include "algorithm/fordfulkerson.h"
+#include "algorithm/prim.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -316,10 +317,8 @@ void MainWindow::beforeAlgorithm()
 {
     states.clear();
     ui->widget->clearInternalState();
-    qDebug() << "mustCOPY !!";
-    // Graph gCopy = ui->widget->GetGraph();
-    states.append(ui->widget->GetGraph()); // add graph at [0] as original
-    qDebug() << "mustCOPY END";
+    // add graph at [0] as original
+    states.append(ui->widget->GetGraph());
 }
 
 void MainWindow::afterAlgorithm()
@@ -365,38 +364,8 @@ void MainWindow::on_btn_primAlgo_clicked()
 {
     beforeAlgorithm();
 
-    Graph gCopy = ui->widget->GetGraph();
-    GraphEdge* firstEdge = gCopy.getLowestEdge()[0];
-    firstEdge->node1->existInTrees = true;
-    firstEdge->node2->existInTrees = true;
-    firstEdge->node1->color = ColorMode::BOLD;
-    firstEdge->node2->color = ColorMode::BOLD;
-    firstEdge->color = ColorMode::BOLD;
-    states.append(gCopy);
-
-        // Loop algo
-        for (int i = 0; i < gCopy.nodes.size(); i++) {
-            GraphEdge* lowestEdge = nullptr;
-            for (GraphNode& node : gCopy.nodes) {
-                if (!node.existInTrees) continue;
-                for (GraphEdge* edge : gCopy.getLowestEdge(gCopy.GetIncidentEdges(&node))) {
-                    if (edge->node1->existInTrees && edge->node2->existInTrees)
-                        continue;
-                    else if (lowestEdge == nullptr)
-                        lowestEdge = edge;
-                    else if (edge->w < lowestEdge->w)
-                        lowestEdge = edge;
-                }
-            }
-            if (lowestEdge != nullptr) {
-                lowestEdge->node1->existInTrees = true;
-                lowestEdge->node2->existInTrees = true;
-                lowestEdge->node1->color = ColorMode::BOLD;
-                lowestEdge->node2->color = ColorMode::BOLD;
-                lowestEdge->color = ColorMode::BOLD;
-                states.append(gCopy);
-            }
-        }
+    Prim algo(&states);
+    algo.run();
 
     afterAlgorithm();
 }

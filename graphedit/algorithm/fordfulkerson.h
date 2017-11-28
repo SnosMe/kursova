@@ -1,16 +1,13 @@
 #ifndef FORDFULKERSON_H
 #define FORDFULKERSON_H
 
-#include "mainwindow.h"
+#include "algorithm.h"
 
-class FordFulkerson
+class FordFulkerson : Algorithm
 {
     static const int WHITE = 0;
     static const int GRAY = 1;
     static const int BLACK = 2;
-
-    QList<Graph>* states;
-    Graph gCopy;
 
     int n;
     int** capacity;
@@ -30,6 +27,7 @@ class FordFulkerson
 public:
     FordFulkerson(QList<Graph>* states);
     ~FordFulkerson();
+    bool run();
 };
 
 #endif // FORDFULKERSON_H

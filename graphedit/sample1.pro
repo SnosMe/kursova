@@ -20,6 +20,7 @@ SOURCES += main.cpp\
     io/graphreader.cpp \
     graphbackground.cpp \
 	algorithm/fordfulkerson.cpp \
+    algorithm/prim.cpp
 
 HEADERS  += mainwindow.h \
     graphedit.h \
@@ -29,6 +30,8 @@ HEADERS  += mainwindow.h \
     graphbackground.h \
 	algorithm/dijkstra.h \
 	algorithm/fordfulkerson.h \
+    algorithm/algorithm.h \
+    algorithm/prim.h
 
 FORMS    += mainwindow.ui
 
