@@ -18,6 +18,7 @@ GraphEdit::GraphEdit(QWidget *parent) : QWidget(parent)
     mode = MODE_NONE;
     selectedEdge = nullptr;
     selectedNode = nullptr;
+    viewport.setRect(-1.0, -1.0, 2, 2);
     setFocusPolicy(Qt::StrongFocus);
 }
 
@@ -39,10 +40,13 @@ void GraphEdit::paintEvent(QPaintEvent*)
 
     for (int i = 0; i < g.edges.length(); i++)
     {
-        int x1 = g.edges[i].node1->x*w;
-        int y1 = g.edges[i].node1->y*h;
-        int x2 = g.edges[i].node2->x*w;
-        int y2 = g.edges[i].node2->y*h;
+        /*int x1 = (g.edges[i].node1->x-viewport.left())*w/vievport.width();
+        int y1 = (g.edges[i].node1->y-viewport.top())*h;
+        int x2 = (g.edges[i].node2->x-viewport.left())*w;
+        int y2 = (g.edges[i].node2->y-viewport.top())*h;*/
+
+        QPointF p1 = toScreenCoords(QPointF(g.edges[i].node1->x, g.edges[i].node1->y));
+        QPointF p2 = toScreenCoords(QPointF(g.edges[i].node2->x, g.edges[i].node2->y));
 
         if (&g.edges[i] == selectedEdge && mode == MODE_SELEDGE)
         {
@@ -61,14 +65,16 @@ void GraphEdit::paintEvent(QPaintEvent*)
             p.setPen(QPen(QColor(33, 33, 33), 1.0));
         }
 
-        p.drawLine(x1, y1, x2, y2);
+        //p.drawLine(x1, y1, x2, y2);
+        p.drawLine(p1, p2);
         if (g.directed)
         {
             // TODO draw arrow [1] -----> [2]
         }
 
         p.setPen(QPen(QColor(33, 33, 33), 1.0));
-        p.drawText((x1+x2)/2, (y1+y2)/2, QVariant(g.edges[i].w).toString());
+        //p.drawText((x1+x2)/2, (y1+y2)/2, QVariant(g.edges[i].w).toString());
+        p.drawText((p1+p2)/2.0, QVariant(g.edges[i].w).toString());
     }
 
     p.setPen(QPen(QColor(33, 33, 33)));
@@ -112,12 +118,15 @@ void GraphEdit::paintEvent(QPaintEvent*)
             p.setBrush(QBrush(QColor(255, 255, 255)));
         }
 
-        int x = g.nodes[i].x*w - r/2;
-        int y = g.nodes[i].y*h - r/2;
-        p.drawEllipse(x, y, r, r);
+        QPointF px = toScreenCoords(QPointF(g.nodes[i].x, g.nodes[i].y));
+
+        //int x = g.nodes[i].x*w - r/2;
+        //int y = g.nodes[i].y*h - r/2;
+        //p.drawEllipse(x, y, r, r);
+        p.drawEllipse(px, r/2, r/2);
 
         p.setPen(textPan);
-        p.drawText(QRectF(x, y, r, r), Qt::AlignCenter, g.nodes[i].name);
+        p.drawText(QRectF(px.x()-r/2, px.y()-r/2, r, r), Qt::AlignCenter, g.nodes[i].name);
     }
 }
 
@@ -268,8 +277,10 @@ void GraphEdit::mouseMoveEvent(QMouseEvent* e)
 
             if (x >= 0 && x <= w && y >= 0 && y <= w)
             {
-                selectedNode->x = e->x()/w;
-                selectedNode->y = e->y()/h;
+                QPointF p = toInternalCoords(QPointF(x, y));
+
+                selectedNode->x = p.x();
+                selectedNode->y = p.y();
 
                 update();
             }
@@ -415,7 +426,8 @@ GraphNode* GraphEdit::getNodeAt(int x, int y)
 
     for (int i = 0; i < g.nodes.length(); i++)
     {
-        int d = dist(g.nodes[i].x*w - x, g.nodes[i].y*h - y);
+        QPointF p = toScreenCoords(QPointF(g.nodes[i].x, g.nodes[i].y));
+        int d = dist(p.x() - x, p.y() - y);
         if (d <= r)
         {
             return &g.nodes[i];
@@ -433,8 +445,10 @@ GraphEdge* GraphEdit::getEdgeAt(int x, int y)
     w = sz.width();
     h = sz.height();
 
-    float rx = x/w;
-    float ry = y/h;
+    QPointF p = toInternalCoords(QPointF(x,y));
+
+    float rx = p.x();
+    float ry = p.y();
 
     for (int i = 0; i < g.edges.length(); i++)
     {
@@ -469,11 +483,9 @@ bool GraphEdit::AddNode(int x, int y)
         prev = &g.nodes.last();
     }
 
-    int w, h;
-    QSize sz = this->size();
-    w = sz.width();
-    h = sz.height();
-    g.AddNode(float(x)/w, float(y)/h);
+    QPointF p = toInternalCoords(QPointF(x, y));
+
+    g.AddNode(p.x(), p.y());
 
     end = &g.nodes.last();
     if (prev != nullptr && static_cast<MainWindow*>(QWidget::window())->autoConnectNodes()) {
@@ -503,6 +515,22 @@ void GraphEdit::clearInternalState()
     emit edgeSelectionLoss();
     emit nodeSelectionLoss();
     // from, to = ;
+}
+
+QPointF GraphEdit::toScreenCoords(QPointF pos)
+{
+    QSize sz = this->size();
+    qreal x = (pos.x()-viewport.left())*sz.width()/viewport.width();
+    qreal y = (pos.y()-viewport.top())*sz.height()/viewport.height();
+    return QPointF(x, y);
+}
+
+QPointF GraphEdit::toInternalCoords(QPointF pos)
+{
+    QSize sz = this->size();
+    qreal x = pos.x()*viewport.width()/sz.width()+viewport.left();
+    qreal y = pos.y()*viewport.height()/sz.height()+viewport.top();
+    return QPointF(x, y);
 }
 
 /*QVector<GraphEdge> GraphEdit::GetEdges()

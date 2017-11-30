@@ -50,10 +50,13 @@ private:
     EditorMode          mode;
     QPoint              from;
     QPoint              to;
+    QRectF              viewport;
 
 protected:
     GraphNode* getNodeAt(int x, int y);
     GraphEdge* getEdgeAt(int x, int y);
+    QPointF    toScreenCoords(QPointF);
+    QPointF    toInternalCoords(QPointF);
     //int getNodeIndexByID(int);
 
 protected:
