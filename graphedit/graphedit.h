@@ -11,7 +11,8 @@ enum EditorMode
     MODE_NONE,
     MODE_NEWEDGE,
     MODE_MOVE,
-    MODE_SELEDGE
+    MODE_SELEDGE,
+    MODE_MOVE_VP
 };
 
 class GraphEdit : public QWidget
@@ -51,6 +52,7 @@ private:
     QPoint              from;
     QPoint              to;
     QRectF              viewport;
+    QPointF             old_vp_pos;
 
 protected:
     GraphNode* getNodeAt(int x, int y);

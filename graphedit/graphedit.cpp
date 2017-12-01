@@ -135,65 +135,75 @@ void GraphEdit::mousePressEvent(QMouseEvent* e)
     int x = e->x();
     int y = e->y();
 
-    GraphNode* node = getNodeAt(x, y);
-
-    if (node != nullptr)
+    if (e->button() == Qt::LeftButton)
     {
-        selectedNode = node;
-        selectedEdge = nullptr;
-        from.setX(x);
-        from.setY(y);
-        to.setX(x);
-        to.setY(y);
+        GraphNode* node = getNodeAt(x, y);
 
-        if (mode == MODE_MOVE)
+        if (node != nullptr)
         {
-            emit nodeSelected(node);
-        }
+            selectedNode = node;
+            selectedEdge = nullptr;
+            from.setX(x);
+            from.setY(y);
+            to.setX(x);
+            to.setY(y);
 
-        if (mode == MODE_NONE)
-        {
-            mode = MODE_NEWEDGE;
-            qDebug() << "MODE_NEWEDGE";
-        }
-        else if (mode == MODE_SELEDGE)
-        {
-            emit edgeSelectionLoss();
-            mode = MODE_NEWEDGE;
-            qDebug() << "MODE_NEWEDGE";
-        }
-        update();
-    }
-    else
-    {
-        GraphEdge* edge = getEdgeAt(x, y);
+            if (mode == MODE_MOVE)
+            {
+                emit nodeSelected(node);
+            }
 
-        if (edge != nullptr)
-        {
-            selectedEdge = edge;
-            selectedNode = nullptr;
-            if (mode == MODE_MOVE) emit nodeSelectionLoss();
-            mode = MODE_SELEDGE;
-            emit edgeSelected(edge);
+            if (mode == MODE_NONE)
+            {
+                mode = MODE_NEWEDGE;
+                qDebug() << "MODE_NEWEDGE";
+            }
+            else if (mode == MODE_SELEDGE)
+            {
+                emit edgeSelectionLoss();
+                mode = MODE_NEWEDGE;
+                qDebug() << "MODE_NEWEDGE";
+            }
             update();
-            qDebug() << "MODE_SELEDGE";
         }
         else
         {
-            selectedEdge = nullptr;
-            selectedNode = nullptr;
-            if (mode == MODE_SELEDGE) {
-                update();
-                emit edgeSelectionLoss();
-            }
-            else if (mode == MODE_MOVE)
+            GraphEdge* edge = getEdgeAt(x, y);
+
+            if (edge != nullptr)
             {
+                selectedEdge = edge;
+                selectedNode = nullptr;
+                if (mode == MODE_MOVE) emit nodeSelectionLoss();
+                mode = MODE_SELEDGE;
+                emit edgeSelected(edge);
                 update();
-                emit nodeSelectionLoss();
+                qDebug() << "MODE_SELEDGE";
             }
-            mode = MODE_NONE;
-            qDebug() << "MODE_NONE";
+            else
+            {
+                selectedEdge = nullptr;
+                selectedNode = nullptr;
+                if (mode == MODE_SELEDGE) {
+                    update();
+                    emit edgeSelectionLoss();
+                }
+                else if (mode == MODE_MOVE)
+                {
+                    update();
+                    emit nodeSelectionLoss();
+                }
+                mode = MODE_NONE;
+                qDebug() << "MODE_NONE";
+            }
         }
+    }
+    else if (e->button() == Qt::MidButton)
+    {
+        //old_vp_pos = viewport.topLeft();
+        from = QPoint(x, y);
+        mode = MODE_MOVE_VP;
+        update();
     }
 }
 
@@ -252,6 +262,15 @@ void GraphEdit::mouseReleaseEvent(QMouseEvent* e)
             update();
         }
     }
+    else if (e->button() == Qt::MidButton)
+    {
+        QSizeF sz = viewport.size();
+        viewport.setLeft(viewport.left()+(from.x()-e->x())*sz.width()/size().width());
+        viewport.setTop(viewport.top()+(from.y()-e->y())*sz.height()/size().height());
+        viewport.setSize(sz);
+        mode = MODE_NONE;
+        update();
+    }
 }
 
 void GraphEdit::mouseMoveEvent(QMouseEvent* e)
@@ -285,6 +304,15 @@ void GraphEdit::mouseMoveEvent(QMouseEvent* e)
                 update();
             }
         }
+    }
+    else if (mode == MODE_MOVE_VP)
+    {
+        QSizeF sz = viewport.size();
+        viewport.setLeft(viewport.left()+(from.x()-e->x())*sz.width()/size().width());
+        viewport.setTop(viewport.top()+(from.y()-e->y())*sz.height()/size().height());
+        viewport.setSize(sz);
+        from = QPoint(e->x(), e->y());
+        update();
     }
 }
 
@@ -357,8 +385,8 @@ void GraphEdit::wheelEvent(QWheelEvent* e)
 
     if (v > 0)
     {
-        viewport.setLeft(viewport.left() + viewport.width()/10);
-        viewport.setTop(viewport.top() + viewport.height()/10);
+        viewport.setLeft(viewport.left() + viewport.width()/10.0);
+        viewport.setTop(viewport.top() + viewport.height()/10.0);
         viewport.setWidth(viewport.width()*0.8);
         viewport.setHeight(viewport.height()*0.8);
     }
@@ -366,8 +394,8 @@ void GraphEdit::wheelEvent(QWheelEvent* e)
     {
         viewport.setWidth(viewport.width()*1.25);
         viewport.setHeight(viewport.height()*1.25);
-        viewport.setLeft(viewport.left() - viewport.width()/10);
-        viewport.setTop(viewport.top() - viewport.height()/10);
+        viewport.setLeft(viewport.left() - viewport.width()/10.0);
+        viewport.setTop(viewport.top() - viewport.height()/10.0);
     }
 
     qDebug() << viewport;
