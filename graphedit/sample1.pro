@@ -21,6 +21,7 @@ SOURCES += main.cpp\
     graphbackground.cpp \
 	algorithm/fordfulkerson.cpp \
     algorithm/prim.cpp \
+	algorithm/dijkstra.cpp \
     about_dev.cpp \
     manual.cpp
 
