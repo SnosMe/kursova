@@ -67,6 +67,7 @@ protected:
     void mouseDoubleClickEvent(QMouseEvent*);
     //void keyPressEvent(QKeyEvent*);
     void keyReleaseEvent(QKeyEvent*);
+    void wheelEvent(QWheelEvent*);
 };
 
 #endif // GRAPHEDIT_H

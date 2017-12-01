@@ -349,6 +349,32 @@ void GraphEdit::mouseDoubleClickEvent(QMouseEvent* e)
     update();
 }
 
+void GraphEdit::wheelEvent(QWheelEvent* e)
+{
+    //qDebug() << e->angleDelta();
+    e->accept();
+    int v = e->angleDelta().y()/120;
+
+    if (v > 0)
+    {
+        viewport.setLeft(viewport.left() + viewport.width()/10);
+        viewport.setTop(viewport.top() + viewport.height()/10);
+        viewport.setWidth(viewport.width()*0.8);
+        viewport.setHeight(viewport.height()*0.8);
+    }
+    else if (v < 0)
+    {
+        viewport.setWidth(viewport.width()*1.25);
+        viewport.setHeight(viewport.height()*1.25);
+        viewport.setLeft(viewport.left() - viewport.width()/10);
+        viewport.setTop(viewport.top() - viewport.height()/10);
+    }
+
+    qDebug() << viewport;
+    update();
+}
+
+
 GraphEdge* GraphEdit::GetSelectedEdge()
 {
     if (mode == MODE_SELEDGE) return selectedEdge;
