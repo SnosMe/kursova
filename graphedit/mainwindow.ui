@@ -899,8 +899,8 @@ font-size: 14px;
     <property name="title">
      <string>&amp;Допомога</string>
     </property>
-    <addaction name="action_3"/>
-    <addaction name="action_4"/>
+    <addaction name="showHelp"/>
+    <addaction name="showDevs"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_2"/>
@@ -921,12 +921,12 @@ font-size: 14px;
     <string>Ctrl+O</string>
    </property>
   </action>
-  <action name="action_3">
+  <action name="showHelp">
    <property name="text">
     <string>&amp;Справка</string>
    </property>
   </action>
-  <action name="action_4">
+  <action name="showDevs">
    <property name="text">
     <string>&amp;Розробники</string>
    </property>

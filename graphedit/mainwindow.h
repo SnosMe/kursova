@@ -53,6 +53,10 @@ private slots:
 
     void on_btn_fordaAlgo_clicked();
 
+    void on_showHelp_triggered();
+
+    void on_showDevs_triggered();
+
 private:
     Ui::MainWindow *ui;
     QList<Graph> states;

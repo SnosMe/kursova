@@ -4,6 +4,8 @@
 #include <QtAlgorithms>
 #include <QHash>
 #include "mainwindow.h"
+#include "manual.h"
+#include "about_dev.h"
 #include "ui_mainwindow.h"
 #include "algorithm/dijkstra.h"
 #include "io/graphwriter.h"
@@ -428,4 +430,16 @@ void MainWindow::on_btn_fordaAlgo_clicked()
     FordFulkerson run(&states);
 
     afterAlgorithm();
+}
+
+void MainWindow::on_showHelp_triggered()
+{
+    Manual *help = new Manual();
+    help->show();
+}
+
+void MainWindow::on_showDevs_triggered()
+{
+    About_Dev *devs = new About_Dev();
+    devs->show();
 }
