@@ -27,15 +27,16 @@ private slots:
     void on_widget_edgeSelectionLoss();
     void on_widget_nodeSelected(GraphNode*);
     void on_widget_nodeSelectionLoss();
-    void on_lineEdit_textEdited(const QString &str);
 
     void on_btn_firstState_clicked();
     void on_btn_prevState_clicked();
     void on_btn_nextState_clicked();
     void on_btn_lastState_clicked();
 
-    void on_btn_dijkstra_clicked();
     void on_btn_editGraph_clicked();
+    void on_btn_clearAll_clicked();
+    void on_directedGraph_stateChanged(int state);
+    void on_graphBg_backgroundChanged(bool isActive);
 
     void on_saveToFile_triggered();
     void on_openFromFile_triggered();
@@ -43,20 +44,12 @@ private slots:
     void on_btn_markBegin_clicked();
     void on_btn_markEnd_clicked();
 
-    void on_btn_clearAll_clicked();
-
-    void on_directedGraph_stateChanged(int state);
-
-    void on_btn_bgImage_clicked();
-
     void on_btn_primAlgo_clicked();
-
     void on_btn_kruskalAlgo_clicked();
-
+    void on_btn_dijkstra_clicked();
     void on_btn_fordaAlgo_clicked();
 
     void on_showHelp_triggered();
-
     void on_showDevs_triggered();
 
 private:
@@ -65,7 +58,7 @@ private:
     About_Dev* devsWindow;
     QList<Graph> states;
     int stateIdx;
-    void setBeginEndBtnsState();
+    void updateBeginEndBtnsState();
     void beforeAlgorithm();
     void afterAlgorithm();
 };

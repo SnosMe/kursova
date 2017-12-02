@@ -1,22 +1,23 @@
 #include <QStack>
-#include <QDebug>
 #include <QFileDialog>
-#include <QtAlgorithms>
-#include <QHash>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "algorithm/dijkstra.h"
 #include "io/graphwriter.h"
 #include "io/graphreader.h"
 #include "algorithm/fordfulkerson.h"
 #include "algorithm/prim.h"
 #include "algorithm/dijkstra.h"
+#include "algorithm/kruskal.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->btn_deleteBgImage->setVisible(false);
+    connect(this->ui->btn_bgImage, SIGNAL(clicked()), this->ui->graphBg, SLOT(changeBackground()));
+    connect(this->ui->btn_deleteBgImage, SIGNAL(clicked()), this->ui->graphBg, SLOT(deleteBackground()));
+    connect(this->ui->lineEdit, SIGNAL(textEdited(QString)), this->ui->widget, SLOT(setSelectedObjectText(QString)));
     helpWindow = new Manual();
     devsWindow = new About_Dev();
 }
@@ -44,20 +45,6 @@ void MainWindow::setDirectedGraph(bool directed)
     ui->widget->GetGraph().directed = directed;
 }
 
-void MainWindow::on_lineEdit_textEdited(const QString &str)
-{
-    if (ui->widget->selectedEdge != nullptr) {
-        int w  = str.toInt();
-        if (w > 0) {
-            ui->widget->selectedEdge->w = w;
-            ui->widget->update();
-        }
-    } else if (ui->widget->selectedNode != nullptr) {
-        ui->widget->selectedNode->name = str;
-        ui->widget->update();
-    }
-}
-
 void MainWindow::on_widget_edgeSelected(GraphEdge* edge)
 {
     ui->lineEdit->setText(QString::number(edge->w));
@@ -75,7 +62,7 @@ void MainWindow::on_widget_nodeSelected(GraphNode* node)
 
     ui->btn_markBegin->setEnabled(true);
     ui->btn_markEnd->setEnabled(true);
-    setBeginEndBtnsState();
+    updateBeginEndBtnsState();
 }
 
 void MainWindow::on_widget_edgeSelectionLoss()
@@ -86,11 +73,12 @@ void MainWindow::on_widget_edgeSelectionLoss()
 
 void MainWindow::on_widget_nodeSelectionLoss()
 {
+    // lineEdit is common for edge and node
     on_widget_edgeSelectionLoss();
 
     ui->btn_markBegin->setEnabled(false);
     ui->btn_markEnd->setEnabled(false);
-    setBeginEndBtnsState();
+    updateBeginEndBtnsState();
 }
 
 void MainWindow::on_btn_firstState_clicked()
@@ -99,7 +87,6 @@ void MainWindow::on_btn_firstState_clicked()
     {
         stateIdx = 1;
         ui->widget->clearInternalState();
-        // this->on_widget_edgeSelectionLoss(); GLOBAL_STATE if ==
         ui->widget->SetGraph(states[stateIdx]);
     }
 }
@@ -187,16 +174,16 @@ void MainWindow::on_openFromFile_triggered()
 void MainWindow::on_btn_markBegin_clicked()
 {
     ui->widget->GetGraph().setBeginNode(ui->widget->selectedNode);
-    setBeginEndBtnsState();
+    updateBeginEndBtnsState();
 }
 
 void MainWindow::on_btn_markEnd_clicked()
 {
     ui->widget->GetGraph().setEndNode(ui->widget->selectedNode);
-    setBeginEndBtnsState();
+    updateBeginEndBtnsState();
 }
 
-void MainWindow::setBeginEndBtnsState()
+void MainWindow::updateBeginEndBtnsState()
 {
     if (ui->widget->selectedNode == nullptr)
     {
@@ -235,7 +222,6 @@ void MainWindow::afterAlgorithm()
 {
     stateIdx = 1;
     ui->widget->SetGraph(states[stateIdx]);
-    ui->widget->update();
     ui->toolsWidget->setCurrentWidget(ui->viewTools);
 }
 
@@ -248,26 +234,6 @@ void MainWindow::on_btn_clearAll_clicked()
 void MainWindow::on_directedGraph_stateChanged(int state)
 {
     ui->widget->GetGraph().directed = (state == Qt::Checked);
-}
-
-void MainWindow::on_btn_bgImage_clicked()
-{
-    QString fileName = QFileDialog::getOpenFileName(this, "Відкрити зображення", "", "Файли зображень (*.png *.jpg *.bmp)");
-
-    if (!fileName.isEmpty())
-    {
-        QImage original(fileName);
-        original = original.convertToFormat(QImage::Format_ARGB32);
-
-        QImage newImg(original.size(), QImage::Format_ARGB32);
-        newImg.fill(Qt::transparent);
-
-        QPainter painter(&newImg);
-        painter.setOpacity(0.1);
-        painter.drawImage(QRect(0, 0, original.width(), original.height()), original);
-
-        ui->graphBg->bgImage = newImg;
-    }
 }
 
 void MainWindow::on_btn_primAlgo_clicked()
@@ -284,48 +250,8 @@ void MainWindow::on_btn_kruskalAlgo_clicked()
 {
     beforeAlgorithm();
 
-    Graph gCopy = ui->widget->GetGraph();
-    // algo
-    int m = gCopy.edges.size();
-    int n = gCopy.nodes.size();
-
-    QVector<GraphEdge*> g;
-    for (GraphEdge& edge : gCopy.edges)
-        g.append(&edge);
-
-    qSort(g.begin(), g.end(), GraphEdge::lessThan);
-
-    QHash<GraphNode*, int> tree_id;
-    for (int i=0; i<n; ++i)
-        tree_id.insert(&gCopy.nodes[i], i);
-
-    for (int i=0; i<m; ++i)
-    {
-        GraphNode* a = g[i]->node1;
-        GraphNode* b = g[i]->node2;
-
-        if (tree_id.value(a) != tree_id.value(b))
-        {
-            g[i]->node1->existInTrees = true;
-            g[i]->node2->existInTrees = true;
-            g[i]->node1->color = ColorMode::BOLD;
-            g[i]->node2->color = ColorMode::BOLD;
-            g[i]->color = ColorMode::BOLD;
-            states.append(gCopy);
-
-            int old_id = tree_id.value(b);
-            int new_id = tree_id.value(a);
-            QMutableHashIterator<GraphNode*, int> j(tree_id);
-            while (j.hasNext())
-            {
-                j.next();
-                if (j.value() == old_id)
-                {
-                    j.value() = new_id;
-                }
-            }
-        }
-    }
+    Kruskal algo(&states);
+    algo.run();
 
     afterAlgorithm();
 }
@@ -348,4 +274,18 @@ void MainWindow::on_showHelp_triggered()
 void MainWindow::on_showDevs_triggered()
 {
     devsWindow->show();
+}
+
+void MainWindow::on_graphBg_backgroundChanged(bool isActive)
+{
+    if (isActive)
+    {
+        ui->btn_bgImage->setVisible(false);
+        ui->btn_deleteBgImage->setVisible(true);
+    }
+    else
+    {
+        ui->btn_deleteBgImage->setVisible(false);
+        ui->btn_bgImage->setVisible(true);
+    }
 }

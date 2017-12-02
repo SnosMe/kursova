@@ -1,4 +1,4 @@
-#include "../algorithm/fordfulkerson.h"
+#include "fordfulkerson.h"
 
 FordFulkerson::FordFulkerson(QList<Graph> *states)
     : Algorithm(states)

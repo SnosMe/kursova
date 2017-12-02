@@ -1,4 +1,4 @@
-#include "../algorithm/dijkstra.h"
+#include "dijkstra.h"
 
 
 Dijkstra::Dijkstra(QList<Graph> *states)

@@ -23,7 +23,8 @@ SOURCES += main.cpp\
     algorithm/prim.cpp \
 	algorithm/dijkstra.cpp \
     about_dev.cpp \
-    manual.cpp
+    manual.cpp \
+    algorithm/kruskal.cpp
 
 HEADERS  += mainwindow.h \
     graphedit.h \
@@ -36,7 +37,8 @@ HEADERS  += mainwindow.h \
     algorithm/algorithm.h \
     algorithm/prim.h \
     about_dev.h \
-    manual.h
+    manual.h \
+    algorithm/kruskal.h
 
 FORMS    += mainwindow.ui \
     about_dev.ui \

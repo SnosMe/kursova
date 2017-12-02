@@ -1,6 +1,5 @@
 #include <algorithm>
 #include <cmath>
-#include <QVariant>
 #include <QDebug>
 #include <QMouseEvent>
 #include "mainwindow.h"
@@ -73,8 +72,8 @@ void GraphEdit::paintEvent(QPaintEvent*)
         }
 
         p.setPen(QPen(QColor(33, 33, 33), 1.0));
-        //p.drawText((x1+x2)/2, (y1+y2)/2, QVariant(g.edges[i].w).toString());
-        p.drawText((p1+p2)/2.0, QVariant(g.edges[i].w).toString());
+        //p.drawText((x1+x2)/2, (y1+y2)/2, QString::number(g.edges[i].w));
+        p.drawText((p1+p2)/2.0, QString::number(g.edges[i].w));
     }
 
     p.setPen(QPen(QColor(33, 33, 33)));
@@ -402,73 +401,6 @@ void GraphEdit::wheelEvent(QWheelEvent* e)
     update();
 }
 
-
-GraphEdge* GraphEdit::GetSelectedEdge()
-{
-    if (mode == MODE_SELEDGE) return selectedEdge;
-    else return nullptr;
-}
-
-void GraphEdit::SetEdgeWeight(GraphEdge* edge, int w)
-{
-    edge->w = w;
-}
-
-/*
-int** GraphEdit::GetMatrix()
-{
-    int** ret = new int*[nodes.length()];
-
-    for (int i = 0; i < nodes.length(); i++)
-    {
-        ret[i] = new int[nodes.length()];
-
-        for (int j = 0; j < nodes.length(); j++)
-        {
-            ret[i][j] = 0;
-        }
-    }
-
-    for (int i = 0; i < edges.length(); i++)
-    {
-        int v1 = edges[i].node1;
-        int v2 = edges[i].node2;
-
-        ret[v1][v2] = edges[i].w;
-        ret[v2][v1] = edges[i].w;
-    }
-
-    return ret;
-}
-
-void GraphEdit::HighlightEdge(int a, int b, bool v)
-{
-    for (int i = 0; i < edges.length(); i++)
-    {
-        if ((edges[i].node1 == a &&
-             edges[i].node2 == b) ||
-                (edges[i].node1 == b &&
-                 edges[i].node2 == a))
-        {
-            hl_edge[i] = v;
-            break;
-        }
-    }
-
-    update();
-}
-
-void GraphEdit::HighlightNode(int i, bool v)
-{
-    if (i >= 0 && i < nodes.length()) hl_node[i] = v;
-}
-
-int GraphEdit::GetSize()
-{
-    return nodes.length();
-}
-*/
-
 GraphNode* GraphEdit::getNodeAt(int x, int y)
 {
     int w, h, r;
@@ -571,6 +503,22 @@ void GraphEdit::clearInternalState()
     // from, to = ;
 }
 
+void GraphEdit::setSelectedObjectText(const QString& str)
+{
+    if (selectedEdge != nullptr)
+    {
+        int w = str.toInt();
+        if (w > 0) {
+            selectedEdge->w = w;
+            update();
+        }
+    }
+    else if (selectedNode != nullptr) {
+        selectedNode->name = str;
+        update();
+    }
+}
+
 QPointF GraphEdit::toScreenCoords(QPointF pos)
 {
     QSize sz = this->size();
@@ -586,13 +534,3 @@ QPointF GraphEdit::toInternalCoords(QPointF pos)
     qreal y = pos.y()*viewport.height()/sz.height()+viewport.top();
     return QPointF(x, y);
 }
-
-/*QVector<GraphEdge> GraphEdit::GetEdges()
-{
-    return edges;
-}
-
-QVector<GraphNode> GraphEdit::GetNodes()
-{
-    return nodes;
-}*/

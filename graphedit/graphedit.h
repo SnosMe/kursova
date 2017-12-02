@@ -21,12 +21,6 @@ class GraphEdit : public QWidget
 public:
     explicit GraphEdit(QWidget *parent = nullptr);
 
-    GraphEdge* GetSelectedEdge(); // возвращает индекс выделеного ребра, или -1 если ребро не выделено
-    void SetEdgeWeight(GraphEdge*, int);  // установить вес ребра
-   /* int** GetMatrix(); // возвращает матрицу смежности
-    void HighlightEdge(int a, int b, bool v = true); // подсветить ребро
-    void HighlightNode(int i, bool v = true); // подсветить вершину
-    int GetSize(); // возвращает количество вершин*/
     bool AddNode(int x, int y);
     GraphNode*          selectedNode;
     GraphEdge*          selectedEdge;
@@ -34,6 +28,9 @@ public:
     Graph& GetGraph();
     void SetGraph(const Graph &);
     void clearInternalState();
+
+public slots:
+    void setSelectedObjectText(const QString& str);
 
 signals:
     void edgeSelected(GraphEdge* edge);

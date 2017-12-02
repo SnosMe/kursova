@@ -1,4 +1,4 @@
-#include "../algorithm/prim.h"
+#include "prim.h"
 
 bool Prim::run()
 {
