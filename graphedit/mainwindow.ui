@@ -923,7 +923,10 @@ font-size: 14px;
   </action>
   <action name="showHelp">
    <property name="text">
-    <string>&amp;Справка</string>
+    <string>&amp;Довідка</string>
+   </property>
+   <property name="shortcut">
+    <string>F1</string>
    </property>
   </action>
   <action name="showDevs">

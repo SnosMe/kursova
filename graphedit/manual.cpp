@@ -16,10 +16,12 @@ Manual::~Manual()
 void Manual::on_Content_clicked()
 {
     QStringList names;
-    QString ind = ui->Content->currentIndex().data(Qt::DisplayRole).toString();
+    QString title = ui->Content->currentIndex().data(Qt::DisplayRole).toString();
     names << "Загальні відомості" << "Інтерфейс" << "Малювання графу"
-    << "Прима, Краскала" << "Дейкстри" << "Форда-Фалкерсона" << "Кроки алгоритмів" << "Зображення підкладка" << "Збереження і відкриття";
-    switch (names.indexOf(ind)) {
+          << "Прима, Краскала" << "Дейкстри" << "Форда-Фалкерсона"
+          << "Кроки алгоритмів" << "Зображення підкладка" << "Збереження і відкриття";
+    switch (names.indexOf(title))
+    {
         case 0:
                 ui->help_widget->setCurrentWidget(ui->aboutCommon);
             break;
