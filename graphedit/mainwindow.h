@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <QVector>
 #include "graphedit.h"
+#include "manual.h"
+#include "about_dev.h"
 
 namespace Ui {
     class MainWindow;
@@ -58,7 +60,9 @@ private slots:
     void on_showDevs_triggered();
 
 private:
-    Ui::MainWindow *ui;
+    Ui::MainWindow* ui;
+    Manual* helpWindow;
+    About_Dev* devsWindow;
     QList<Graph> states;
     int stateIdx;
     void setBeginEndBtnsState();

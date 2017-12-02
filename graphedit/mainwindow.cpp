@@ -4,8 +4,6 @@
 #include <QtAlgorithms>
 #include <QHash>
 #include "mainwindow.h"
-#include "manual.h"
-#include "about_dev.h"
 #include "ui_mainwindow.h"
 #include "algorithm/dijkstra.h"
 #include "io/graphwriter.h"
@@ -19,10 +17,14 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    helpWindow = new Manual();
+    devsWindow = new About_Dev();
 }
 
 MainWindow::~MainWindow()
 {
+    delete helpWindow;
+    delete devsWindow;
     delete ui;
 }
 
@@ -340,12 +342,10 @@ void MainWindow::on_btn_fordaAlgo_clicked()
 
 void MainWindow::on_showHelp_triggered()
 {
-    Manual *help = new Manual();
-    help->show();
+    helpWindow->show();
 }
 
 void MainWindow::on_showDevs_triggered()
 {
-    About_Dev *devs = new About_Dev();
-    devs->show();
+    devsWindow->show();
 }
