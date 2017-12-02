@@ -61,6 +61,7 @@ private:
     void updateBeginEndBtnsState();
     void beforeAlgorithm();
     void afterAlgorithm();
+    void updateState();
 };
 
 #endif // MAINWINDOW_H

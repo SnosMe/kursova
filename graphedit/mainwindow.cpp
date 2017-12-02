@@ -86,8 +86,7 @@ void MainWindow::on_btn_firstState_clicked()
     if (stateIdx != 1)
     {
         stateIdx = 1;
-        ui->widget->clearInternalState();
-        ui->widget->SetGraph(states[stateIdx]);
+        updateState();
     }
 }
 
@@ -96,8 +95,7 @@ void MainWindow::on_btn_prevState_clicked()
     if (stateIdx > 1)
     {
         stateIdx--;
-        ui->widget->clearInternalState();
-        ui->widget->SetGraph(states[stateIdx]);
+        updateState();
     }
 }
 
@@ -106,8 +104,7 @@ void MainWindow::on_btn_nextState_clicked()
     if (stateIdx < states.length()-1)
     {
         stateIdx++;
-        ui->widget->clearInternalState();
-        ui->widget->SetGraph(states[stateIdx]);
+        updateState();
     }
 }
 
@@ -116,8 +113,7 @@ void MainWindow::on_btn_lastState_clicked()
     if (stateIdx != states.length()-1)
     {
         stateIdx = states.length()-1;
-        ui->widget->clearInternalState();
-        ui->widget->SetGraph(states[stateIdx]);
+        updateState();
     }
 }
 
@@ -220,9 +216,17 @@ void MainWindow::beforeAlgorithm()
 
 void MainWindow::afterAlgorithm()
 {
-    stateIdx = 1;
-    ui->widget->SetGraph(states[stateIdx]);
+    stateIdx = 0;
+    ui->label_countSteps->setText(QString::number(states.length()-1));
+    on_btn_firstState_clicked();
     ui->toolsWidget->setCurrentWidget(ui->viewTools);
+}
+
+void MainWindow::updateState()
+{
+    ui->widget->clearInternalState();
+    ui->widget->SetGraph(states[stateIdx]);
+    ui->label_currentStep->setText(QString::number(stateIdx));
 }
 
 void MainWindow::on_btn_clearAll_clicked()
