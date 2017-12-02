@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Довідка</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="img.qrc">
+    <normaloff>:/img/app.ico</normaloff>:/img/app.ico</iconset>
+  </property>
   <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,1">
    <property name="spacing">
     <number>8</number>
@@ -511,6 +515,8 @@ p, li { white-space: pre-wrap; }
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="img.qrc"/>
+ </resources>
  <connections/>
 </ui>

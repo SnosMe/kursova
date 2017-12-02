@@ -19,6 +19,10 @@
   <property name="windowTitle">
    <string>Розробники</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="img.qrc">
+    <normaloff>:/img/app.ico</normaloff>:/img/app.ico</iconset>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <property name="spacing">
     <number>16</number>
@@ -75,6 +79,8 @@ image: url(:/img/logo.png);</string>
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="img.qrc"/>
+ </resources>
  <connections/>
 </ui>
