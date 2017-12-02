@@ -6,6 +6,7 @@ About_Dev::About_Dev(QWidget *parent) :
     ui(new Ui::About_Dev)
 {
     ui->setupUi(this);
+    this->setWindowFlags(Qt::Window | Qt::WindowCloseButtonHint);
 }
 
 About_Dev::~About_Dev()
