@@ -3,9 +3,9 @@
 
 #include "algorithm.h"
 
-class Prim : Algorithm
+class Prim : public Algorithm
 {
-    void makeColored(GraphEdge* edge);
+    void markEdge(GraphEdge* edge);
 
 public:
     Prim(QList<Graph>* states);

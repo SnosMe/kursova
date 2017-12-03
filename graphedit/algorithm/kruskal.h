@@ -3,7 +3,7 @@
 
 #include "algorithm.h"
 
-class Kruskal : Algorithm
+class Kruskal : public Algorithm
 {
 public:
     Kruskal(QList<Graph>* states);

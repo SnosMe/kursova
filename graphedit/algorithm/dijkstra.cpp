@@ -89,6 +89,7 @@ bool Dijkstra::run()
                         if ((edge.node1 == prev && edge.node2 == node) ||
                             (edge.node1 == node && edge.node2 == prev)) {
                             edge.color = ColorMode::GREEN;
+                            result += edge.w;
                         }
                     }
                 }

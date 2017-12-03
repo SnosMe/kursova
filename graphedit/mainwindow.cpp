@@ -14,10 +14,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->btn_deleteBgImage->setVisible(false);
+    ui->btn_deleteBgImage->hide();
+    hideAllAlgoResults();
+
     connect(this->ui->btn_bgImage, SIGNAL(clicked()), this->ui->graphBg, SLOT(changeBackground()));
     connect(this->ui->btn_deleteBgImage, SIGNAL(clicked()), this->ui->graphBg, SLOT(deleteBackground()));
     connect(this->ui->lineEdit, SIGNAL(textEdited(QString)), this->ui->widget, SLOT(setSelectedObjectText(QString)));
+
     helpWindow = new Manual();
     devsWindow = new About_Dev();
 }
@@ -122,9 +125,12 @@ void MainWindow::on_btn_dijkstra_clicked()
     beforeAlgorithm();
     
     Dijkstra algo(&states);
-    algo.run();
-
-    afterAlgorithm();
+    if (algo.run())
+    {
+        afterAlgorithm();
+        ui->minPathWrapper->show();
+        ui->label_minPath->setText(QString::number(algo.getResult()));
+    }
 }
 
 void MainWindow::on_btn_editGraph_clicked()
@@ -219,6 +225,7 @@ void MainWindow::afterAlgorithm()
     stateIdx = 0;
     ui->label_countSteps->setText(QString::number(states.length()-1));
     on_btn_firstState_clicked();
+    hideAllAlgoResults();
     ui->toolsWidget->setCurrentWidget(ui->viewTools);
 }
 
@@ -227,6 +234,13 @@ void MainWindow::updateState()
     ui->widget->clearInternalState();
     ui->widget->SetGraph(states[stateIdx]);
     ui->label_currentStep->setText(QString::number(stateIdx));
+}
+
+void MainWindow::hideAllAlgoResults()
+{
+    ui->minPathWrapper->hide();
+    ui->minTreeWrapper->hide();
+    ui->maxFlowWrapper->hide();
 }
 
 void MainWindow::on_btn_clearAll_clicked()
@@ -245,9 +259,12 @@ void MainWindow::on_btn_primAlgo_clicked()
     beforeAlgorithm();
 
     Prim algo(&states);
-    algo.run();
-
-    afterAlgorithm();
+    if (algo.run())
+    {
+        afterAlgorithm();
+        ui->minTreeWrapper->show();
+        ui->label_minTree->setText(QString::number(algo.getResult()));
+    }
 }
 
 void MainWindow::on_btn_kruskalAlgo_clicked()
@@ -255,9 +272,12 @@ void MainWindow::on_btn_kruskalAlgo_clicked()
     beforeAlgorithm();
 
     Kruskal algo(&states);
-    algo.run();
-
-    afterAlgorithm();
+    if (algo.run())
+    {
+        afterAlgorithm();
+        ui->minTreeWrapper->show();
+        ui->label_minTree->setText(QString::number(algo.getResult()));
+    }
 }
 
 void MainWindow::on_btn_fordaAlgo_clicked()
@@ -265,9 +285,14 @@ void MainWindow::on_btn_fordaAlgo_clicked()
     beforeAlgorithm();
 
     states.append(states[0]); // TODO: delete this line after UI done
-    FordFulkerson run(&states);
 
-    afterAlgorithm();
+    FordFulkerson algo(&states);
+    if (algo.run())
+    {
+        afterAlgorithm();
+        ui->maxFlowWrapper->show();
+        ui->label_maxFlow->setText(QString::number(algo.getResult()));
+    }
 }
 
 void MainWindow::on_showHelp_triggered()
@@ -284,12 +309,12 @@ void MainWindow::on_graphBg_backgroundChanged(bool isActive)
 {
     if (isActive)
     {
-        ui->btn_bgImage->setVisible(false);
-        ui->btn_deleteBgImage->setVisible(true);
+        ui->btn_bgImage->hide();
+        ui->btn_deleteBgImage->show();
     }
     else
     {
-        ui->btn_deleteBgImage->setVisible(false);
-        ui->btn_bgImage->setVisible(true);
+        ui->btn_deleteBgImage->hide();
+        ui->btn_bgImage->show();
     }
 }

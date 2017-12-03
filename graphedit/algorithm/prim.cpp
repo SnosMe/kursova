@@ -3,7 +3,7 @@
 bool Prim::run()
 {
     GraphEdge* firstEdge = gCopy.getLowestEdge()[0];
-    makeColored(firstEdge);
+    markEdge(firstEdge);
     states->append(gCopy);
 
     for (int i = 0; i < gCopy.nodes.size(); i++)
@@ -28,7 +28,7 @@ bool Prim::run()
 
         if (lowestEdge != nullptr)
         {
-            makeColored(lowestEdge);
+            markEdge(lowestEdge);
             states->append(gCopy);
         }
     }
@@ -36,13 +36,14 @@ bool Prim::run()
     return true;
 }
 
-void Prim::makeColored(GraphEdge* edge)
+void Prim::markEdge(GraphEdge* edge)
 {
     edge->node1->existInTrees = true;
     edge->node2->existInTrees = true;
     edge->node1->color = ColorMode::BOLD;
     edge->node2->color = ColorMode::BOLD;
     edge->color = ColorMode::BOLD;
+    result += edge->w;
 }
 
 Prim::Prim(QList<Graph>* states)

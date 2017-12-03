@@ -9,7 +9,7 @@ struct DijkstraGraph
     GraphNode* end;
 };
 
-class Dijkstra : Algorithm
+class Dijkstra : public Algorithm
 {
 public:
     Dijkstra(QList<Graph>* states);

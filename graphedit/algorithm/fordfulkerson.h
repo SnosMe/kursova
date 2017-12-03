@@ -3,7 +3,7 @@
 
 #include "algorithm.h"
 
-class FordFulkerson : Algorithm
+class FordFulkerson : public Algorithm
 {
     static const int WHITE = 0;
     static const int GRAY = 1;

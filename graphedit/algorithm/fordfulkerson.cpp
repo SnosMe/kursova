@@ -27,7 +27,7 @@ FordFulkerson::FordFulkerson(QList<Graph> *states)
     {
         capacity[getNodeIdx(edge.node1)][getNodeIdx(edge.node2)] = edge.w;
     }
-    qDebug() << "Ford:" << maxFlow(getNodeIdx(gCopy.begin), getNodeIdx(gCopy.end));
+    result = maxFlow(getNodeIdx(gCopy.begin), getNodeIdx(gCopy.end));
 }
 
 FordFulkerson::~FordFulkerson()
@@ -49,7 +49,7 @@ FordFulkerson::~FordFulkerson()
 bool FordFulkerson::run()
 {
     // TODO
-    return false;
+    return true;
 }
 
 void FordFulkerson::enqueue(int x)

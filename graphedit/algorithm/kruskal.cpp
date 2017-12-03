@@ -32,6 +32,7 @@ bool Kruskal::run()
             g[i]->node1->color = ColorMode::BOLD;
             g[i]->node2->color = ColorMode::BOLD;
             g[i]->color = ColorMode::BOLD;
+            result += g[i]->w;
             states->append(gCopy);
 
             int old_id = tree_id.value(b);
