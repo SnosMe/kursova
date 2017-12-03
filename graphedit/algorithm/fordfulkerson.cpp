@@ -48,6 +48,10 @@ FordFulkerson::~FordFulkerson()
 
 bool FordFulkerson::run()
 {
+    if (!checkRequirements(Directed | BeginEndConnected)) {
+        return false;
+    }
+
     // TODO
     return true;
 }
