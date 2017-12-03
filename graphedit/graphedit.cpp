@@ -212,6 +212,8 @@ void GraphEdit::mousePressEvent(QMouseEvent* e)
         //old_vp_pos = viewport.topLeft();
         from = QPoint(x, y);
         mode = MODE_MOVE_VP;
+        emit edgeSelectionLoss();
+        emit nodeSelectionLoss();
         update();
     }
 }
