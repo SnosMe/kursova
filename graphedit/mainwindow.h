@@ -62,7 +62,6 @@ private:
     void beforeAlgorithm();
     void afterAlgorithm();
     void updateState();
-    void hideAllAlgoResults();
 };
 
 #endif // MAINWINDOW_H

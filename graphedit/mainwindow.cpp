@@ -15,7 +15,6 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->btn_deleteBgImage->hide();
-    hideAllAlgoResults();
 
     connect(this->ui->btn_bgImage, SIGNAL(clicked()), this->ui->graphBg, SLOT(changeBackground()));
     connect(this->ui->btn_deleteBgImage, SIGNAL(clicked()), this->ui->graphBg, SLOT(deleteBackground()));
@@ -128,7 +127,7 @@ void MainWindow::on_btn_dijkstra_clicked()
     if (algo.run())
     {
         afterAlgorithm();
-        ui->minPathWrapper->show();
+        ui->algoResult->setCurrentWidget(ui->minPath);
         ui->label_minPath->setText(QString::number(algo.getResult()));
     }
 }
@@ -225,7 +224,6 @@ void MainWindow::afterAlgorithm()
     stateIdx = 0;
     ui->label_countSteps->setText(QString::number(states.length()-1));
     on_btn_firstState_clicked();
-    hideAllAlgoResults();
     ui->toolsWidget->setCurrentWidget(ui->viewTools);
 }
 
@@ -234,13 +232,6 @@ void MainWindow::updateState()
     ui->widget->clearInternalState();
     ui->widget->SetGraph(states[stateIdx]);
     ui->label_currentStep->setText(QString::number(stateIdx));
-}
-
-void MainWindow::hideAllAlgoResults()
-{
-    ui->minPathWrapper->hide();
-    ui->minTreeWrapper->hide();
-    ui->maxFlowWrapper->hide();
 }
 
 void MainWindow::on_btn_clearAll_clicked()
@@ -262,7 +253,7 @@ void MainWindow::on_btn_primAlgo_clicked()
     if (algo.run())
     {
         afterAlgorithm();
-        ui->minTreeWrapper->show();
+        ui->algoResult->setCurrentWidget(ui->minTree);
         ui->label_minTree->setText(QString::number(algo.getResult()));
     }
 }
@@ -275,7 +266,7 @@ void MainWindow::on_btn_kruskalAlgo_clicked()
     if (algo.run())
     {
         afterAlgorithm();
-        ui->minTreeWrapper->show();
+        ui->algoResult->setCurrentWidget(ui->minTree);
         ui->label_minTree->setText(QString::number(algo.getResult()));
     }
 }
@@ -288,7 +279,7 @@ void MainWindow::on_btn_fordaAlgo_clicked()
     if (algo.run())
     {
         afterAlgorithm();
-        ui->maxFlowWrapper->show();
+        ui->algoResult->setCurrentWidget(ui->maxFlow);
         ui->label_maxFlow->setText(QString::number(algo.getResult()));
     }
 }
