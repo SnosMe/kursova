@@ -5,7 +5,7 @@
 #include "mainwindow.h"
 #include "graphedit.h"
 
-const float LINE_WIDTH = 0.05;
+//const float LINE_WIDTH = 0.05;
 
 static int dist(int x, int y)
 {
@@ -27,15 +27,18 @@ void GraphEdit::paintEvent(QPaintEvent*)
 
     QPainter p(this);
 
+    int font_size = (int) (20.0/std::min(viewport.width(), viewport.height()));
+
     p.setRenderHints(QPainter::Antialiasing);
-    p.setFont(QFont("Consolas", 10));
+    p.setFont(QFont("Consolas", font_size));
 
     int w, h, r;
     QSize sz = this->size();
 
     w = sz.width();
     h = sz.height();
-    r = std::min(w, h)*0.1;
+    //r = std::min(w, h)*0.1;
+    r = std::min(w/viewport.width(), h/viewport.height())*0.2;
 
     for (int i = 0; i < g.edges.length(); i++)
     {
@@ -408,7 +411,7 @@ GraphNode* GraphEdit::getNodeAt(int x, int y)
 
     w = sz.width();
     h = sz.height();
-    r = std::min(w, h)*0.1;
+    r = std::min(w/viewport.width(), h/viewport.height())*0.2/2;
 
     for (int i = 0; i < g.nodes.length(); i++)
     {
@@ -435,6 +438,8 @@ GraphEdge* GraphEdit::getEdgeAt(int x, int y)
 
     float rx = p.x();
     float ry = p.y();
+
+    float LINE_WIDTH = std::min(viewport.width(), viewport.height())*0.025;
 
     for (int i = 0; i < g.edges.length(); i++)
     {
