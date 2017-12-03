@@ -24,7 +24,8 @@ SOURCES += main.cpp\
 	algorithm/dijkstra.cpp \
     about_dev.cpp \
     manual.cpp \
-    algorithm/kruskal.cpp
+    algorithm/kruskal.cpp \
+    algorithm/algorithm.cpp
 
 HEADERS  += mainwindow.h \
     graphedit.h \

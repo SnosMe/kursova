@@ -7,6 +7,10 @@ Kruskal::Kruskal(QList<Graph>* states)
 
 bool Kruskal::run()
 {
+    if (!checkRequirements(Undirected)) {
+        return false;
+    }
+
     int m = gCopy.edges.size();
     int n = gCopy.nodes.size();
 

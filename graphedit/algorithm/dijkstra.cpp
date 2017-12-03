@@ -8,6 +8,10 @@ Dijkstra::Dijkstra(QList<Graph> *states)
 
 bool Dijkstra::run()
 {
+    if (!checkRequirements(BeginEndConnected | Undirected)) {
+        return false;
+    }
+
     QVector<DijkstraGraph> dGraphArr;
     DijkstraGraph dGraph;
     GraphNode* startVert = gCopy.begin;
@@ -28,7 +32,15 @@ bool Dijkstra::run()
     end->color = ColorMode::BOLD;
     edge->color = ColorMode::BOLD;
     states->append(gCopy);
-    qDebug() << ": (" << edge->node1->id << ", " << edge->node2->id << ")\n";
+
+    if (end == gCopy.end) {
+        edge->node1->color = ColorMode::GREEN;
+        edge->node2->color = ColorMode::GREEN;
+        edge->color = ColorMode::GREEN;
+        states->append(gCopy);
+        result = edge->w;
+        return true;
+    }
 
     while (true) {
         GraphEdge* lowestEdge = nullptr;
@@ -82,10 +94,10 @@ bool Dijkstra::run()
         qDebug() << ": (" << lowestEdge->node1->id << ", " << lowestEdge->node2->id << ")\n";
         if (end == gCopy.end) {
             GraphNode* prev = nullptr;
-            for (auto node : foundInGraph->nodes) {
-                gCopy.GetNodeByID(node->id)->color = ColorMode::GREEN;
+            for (GraphNode* node : foundInGraph->nodes) {
+                node->color = ColorMode::GREEN;
                 if (prev != nullptr) {
-                    for (auto& edge : gCopy.edges) {
+                    for (GraphEdge& edge : gCopy.edges) {
                         if ((edge.node1 == prev && edge.node2 == node) ||
                             (edge.node1 == node && edge.node2 == prev)) {
                             edge.color = ColorMode::GREEN;

@@ -2,6 +2,10 @@
 
 bool Prim::run()
 {
+    if (!checkRequirements(Undirected)) {
+        return false;
+    }
+
     GraphEdge* firstEdge = gCopy.getLowestEdge()[0];
     markEdge(firstEdge);
     states->append(gCopy);
