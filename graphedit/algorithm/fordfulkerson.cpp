@@ -27,7 +27,6 @@ FordFulkerson::FordFulkerson(QList<Graph> *states)
     {
         capacity[getNodeIdx(edge.node1)][getNodeIdx(edge.node2)] = edge.w;
     }
-    result = maxFlow(getNodeIdx(gCopy.begin), getNodeIdx(gCopy.end));
 }
 
 FordFulkerson::~FordFulkerson()
@@ -52,7 +51,8 @@ bool FordFulkerson::run()
         return false;
     }
 
-    // TODO
+    result = maxFlow(getNodeIdx(gCopy.begin), getNodeIdx(gCopy.end));
+
     return true;
 }
 
@@ -109,12 +109,34 @@ int FordFulkerson::maxFlow(int source, int sink)
         for (int u = n - 1; pred[u] >= 0; u = pred[u]) {
             flow[pred[u]][u] += increment;
             flow[u][pred[u]] -= increment;
+            // UI
+            GraphNode* node1 = &gCopy.nodes[pred[u]];
+            GraphNode* node2 = &gCopy.nodes[u];
+            GraphEdge* edge= gCopy.getEdgeByNodePair(node1, node2);
+            edge->color = ColorMode::GREEN;
+            edge->flow += increment;
+            states->append(gCopy);
+
+            if (node1 == gCopy.begin || node2 == gCopy.begin)
+            {
+                gCopy.colorGreenToBold();
+            }
         }
         maxFlow += increment;
 
         if (increment == 0) cntZero++;
         if (cntZero == 10) break;
     }
+
+    gCopy.colorGreenToBold();
+    for (GraphEdge& edge : gCopy.edges)
+    {
+        if (edge.flow == edge.w) {
+            edge.color = ColorMode::GREEN;
+        }
+    }
+    states->append(gCopy);
+
     return maxFlow;
 }
 

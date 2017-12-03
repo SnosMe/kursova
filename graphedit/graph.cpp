@@ -4,6 +4,7 @@
 
 QVector<GraphEdge*> Graph::getLowestEdge(QVector<GraphEdge*> edges)
 {
+    // TODO: CHANGE
     QVector<GraphEdge*> ret;
     GraphEdge* lowest = nullptr;
     for (GraphEdge* edge : edges) {
@@ -22,6 +23,7 @@ QVector<GraphEdge*> Graph::getLowestEdge(QVector<GraphEdge*> edges)
 
 QVector<GraphEdge*> Graph::getLowestEdge()
 {
+    // TODO: CHANGE
     QVector<GraphEdge*> ret;
     GraphEdge* lowest = nullptr;
     for (GraphEdge& edge : edges) {
@@ -62,18 +64,7 @@ bool Graph::AddEdge(GraphNode* a, GraphNode* b, int w)
 {
     if (a == b || a == nullptr || b == nullptr) return false;
 
-    bool found = false;
-    for (int i = 0; i < edges.length(); i++)
-    {
-        if ((edges[i].node1 == a && edges[i].node2 == b) ||
-            (edges[i].node1 == b && edges[i].node2 == a))
-        {
-            found = true;
-            break;
-        }
-    }
-
-    if (!found)
+    if (getEdgeByNodePair(a, b) == nullptr)
     {
         qDebug() << "Graph::AddEdge(" << a->id << ", " << b->id << ", " << w << ")";
 
@@ -146,6 +137,19 @@ int Graph::GetNodeIndexByID(int id)
     return -1;
 }
 
+GraphEdge* Graph::getEdgeByNodePair(GraphNode* node1, GraphNode* node2)
+{
+    for (GraphEdge& edge : edges)
+    {
+        if ((edge.node1 == node1 && edge.node2 == node2) ||
+            (edge.node1 == node2 && edge.node2 == node1)) {
+            return &edge;
+        }
+    }
+
+    return nullptr;
+}
+
 QVector<GraphEdge*> Graph::GetIncidentEdges(GraphNode* node)
 {
     QVector<GraphEdge*> ret;
@@ -186,6 +190,15 @@ void Graph::setEndNode(GraphNode* node)
     end = node;
     if (begin == end) {
         begin = nullptr;
+    }
+}
+
+void Graph::colorGreenToBold()
+{
+    for (GraphEdge& edge : edges) {
+        if (edge.color == ColorMode::GREEN) {
+            edge.color = ColorMode::BOLD;
+        }
     }
 }
 

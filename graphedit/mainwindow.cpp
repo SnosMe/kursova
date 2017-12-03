@@ -284,8 +284,6 @@ void MainWindow::on_btn_fordaAlgo_clicked()
 {
     beforeAlgorithm();
 
-    states.append(states[0]); // TODO: delete this line after UI done
-
     FordFulkerson algo(&states);
     if (algo.run())
     {

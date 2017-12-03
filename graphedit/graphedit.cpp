@@ -76,7 +76,14 @@ void GraphEdit::paintEvent(QPaintEvent*)
 
         p.setPen(QPen(QColor(33, 33, 33), 1.0));
         //p.drawText((x1+x2)/2, (y1+y2)/2, QString::number(g.edges[i].w));
-        p.drawText((p1+p2)/2.0, QString::number(g.edges[i].w));
+
+        QString text;
+        if (g.edges[i].flow) {
+            text = QString("%1(%2)").arg(QString::number(g.edges[i].w), QString::number(g.edges[i].flow));
+        } else {
+            text = QString::number(g.edges[i].w);
+        }
+        p.drawText((p1+p2)/2.0, text);
     }
 
     p.setPen(QPen(QColor(33, 33, 33)));

@@ -40,7 +40,8 @@ struct GraphEdge
 {
     GraphNode* node1;
     GraphNode* node2;
-    int w;
+    int w; // also known as capacity
+    int flow; // flow <= capacity
     ColorMode color;
 
     GraphEdge(GraphNode* node1 = 0, GraphNode* node2 = 0, int weight = 1, ColorMode color = ColorMode::CLEAR)
@@ -49,6 +50,7 @@ struct GraphEdge
         this->node2 = node2;
         this->w = weight;
         this->color = color;
+        this->flow = 0;
     }
 
     /* ~GraphEdge ()
@@ -75,13 +77,15 @@ struct Graph
     bool AddEdge(GraphNode* a, GraphNode* b, int w);
     bool RemoveNode(GraphNode* node);
     bool RemoveEdge(GraphEdge* edge);
-    int  GetNodeIndexByID(int);
+    int GetNodeIndexByID(int);
+    GraphEdge* getEdgeByNodePair(GraphNode* node1, GraphNode* node2);
     QVector<GraphEdge*> GetIncidentEdges(GraphNode* node);
     QVector<GraphEdge*> getLowestEdge(QVector<GraphEdge*> edges);
     QVector<GraphEdge*> getLowestEdge();
     GraphNode* GetNodeByID(int);
     void setBeginNode(GraphNode* node);
     void setEndNode(GraphNode* node);
+    void colorGreenToBold();
 
     void printNodes();
 
