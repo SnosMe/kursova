@@ -3,10 +3,14 @@
         <file>img/checkbox-checked.png</file>
         <file>img/checkbox-unchecked.png</file>
         <file>img/logo.png</file>
-        <file>img/app.ico</file>
         <file>img/step-first.png</file>
         <file>img/step-last.png</file>
         <file>img/step-next.png</file>
         <file>img/step-prev.png</file>
+        <file>img/app.ico</file>
+    </qresource>
+    <qresource prefix="/manual">
+        <file>img/manual/graph_fone.png</file>
+        <file>img/manual/steps.png</file>
     </qresource>
 </RCC>
