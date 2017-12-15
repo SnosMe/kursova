@@ -31,6 +31,7 @@ public:
 
 public slots:
     void setSelectedObjectText(const QString& str);
+    void setIsDirectedGraph(int state);
 
 signals:
     void edgeSelected(GraphEdge* edge);

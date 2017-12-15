@@ -553,6 +553,12 @@ void GraphEdit::setSelectedObjectText(const QString& str)
     }
 }
 
+void GraphEdit::setIsDirectedGraph(int state)
+{
+    g.directed = (state == Qt::Checked);
+    update();
+}
+
 QPointF GraphEdit::toScreenCoords(QPointF pos)
 {
     QSize sz = this->size();

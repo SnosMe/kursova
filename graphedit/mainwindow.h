@@ -35,7 +35,6 @@ private slots:
 
     void on_btn_editGraph_clicked();
     void on_btn_clearAll_clicked();
-    void on_directedGraph_stateChanged(int state);
     void on_graphBg_backgroundChanged(bool isActive);
 
     void on_saveToFile_triggered();

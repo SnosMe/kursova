@@ -19,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(this->ui->btn_bgImage, SIGNAL(clicked()), this->ui->graphBg, SLOT(changeBackground()));
     connect(this->ui->btn_deleteBgImage, SIGNAL(clicked()), this->ui->graphBg, SLOT(deleteBackground()));
     connect(this->ui->lineEdit, SIGNAL(textEdited(QString)), this->ui->widget, SLOT(setSelectedObjectText(QString)));
+    connect(this->ui->directedGraph, SIGNAL(stateChanged(int)), this->ui->widget, SLOT(setIsDirectedGraph(int)));
 
     helpWindow = new Manual();
     devsWindow = new About_Dev();
@@ -238,11 +239,6 @@ void MainWindow::on_btn_clearAll_clicked()
 {
     ui->widget->clearInternalState();
     ui->widget->SetGraph(Graph());
-}
-
-void MainWindow::on_directedGraph_stateChanged(int state)
-{
-    ui->widget->GetGraph().directed = (state == Qt::Checked);
 }
 
 void MainWindow::on_btn_primAlgo_clicked()
