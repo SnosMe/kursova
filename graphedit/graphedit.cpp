@@ -2,6 +2,7 @@
 #include <cmath>
 #include <QDebug>
 #include <QMouseEvent>
+#include <QtMath>
 #include "mainwindow.h"
 #include "graphedit.h"
 
@@ -9,7 +10,12 @@
 
 static int dist(int x, int y)
 {
-    return (int) sqrt(x*x+y*y);
+    return (int) qSqrt(x*x+y*y);
+}
+
+static qreal dist(QPointF p)
+{
+    return qSqrt(p.x()*p.x()+p.y()*p.y());
 }
 
 GraphEdit::GraphEdit(QWidget *parent) : QWidget(parent)
@@ -71,7 +77,21 @@ void GraphEdit::paintEvent(QPaintEvent*)
         p.drawLine(p1, p2);
         if (g.directed)
         {
-            // TODO draw arrow [1] -----> [2]
+            QPointF v = p1-p2;
+            v = v*r/dist(v)/2;
+            QPointF v1;
+            QPointF v2;
+            QPointF end = p2+v;
+
+            const qreal ANGLE = 0.393;
+
+            v1.setX(v.x()*qCos(ANGLE)-v.y()*qSin(ANGLE));
+            v1.setY(v.y()*qCos(ANGLE)+v.x()*qSin(ANGLE));
+            v2.setX(v.x()*qCos(ANGLE)+v.y()*qSin(ANGLE));
+            v2.setY(v.y()*qCos(ANGLE)-v.x()*qSin(ANGLE));
+
+            p.drawLine(end, end+v1);
+            p.drawLine(end, end+v2);
         }
 
         p.setPen(QPen(QColor(33, 33, 33), 1.0));
