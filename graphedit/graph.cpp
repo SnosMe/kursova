@@ -83,6 +83,12 @@ bool Graph::RemoveNode(GraphNode* node)
     if (node == nullptr)
         return false;
 
+    if (begin == node) {
+        begin = nullptr;
+    } else if (end == node) {
+        end = nullptr;
+    }
+
     for (int i = 0; i < nodes.length(); i++)
     {
         if (&nodes[i] == node)
