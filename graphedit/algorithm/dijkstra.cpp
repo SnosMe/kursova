@@ -16,7 +16,7 @@ bool Dijkstra::run()
     DijkstraGraph dGraph;
     GraphNode* startVert = gCopy.begin;
 
-    GraphEdge* edge = gCopy.getLowestEdge(gCopy.GetIncidentEdges(startVert))[0];
+    GraphEdge* edge = Graph::getLowestEdge(gCopy.GetIncidentEdges(startVert));
     GraphNode* end = (edge->node1 == startVert) ? edge->node2 : edge->node1;
     end->length = edge->w;
     edge->node1->existInTrees = true;
@@ -48,8 +48,8 @@ bool Dijkstra::run()
         DijkstraGraph* foundInGraph = nullptr;
         for (DijkstraGraph& dGraph : dGraphArr) {
             for (GraphNode* node : dGraph.nodes) {
-                QVector<GraphEdge*> edges = gCopy.getLowestEdge(gCopy.GetIncidentEdges(node));
-                for (GraphEdge* edge : edges) {
+                GraphEdge* edge = Graph::getLowestEdge(gCopy.GetIncidentEdges(node));
+                if (edge != nullptr) {
                     if (edge->node1->existInTrees && edge->node2->existInTrees)
                         continue;
                     int pathLen = (edge->node1->length) ? (edge->node1->length + edge->w) : (edge->node2->length + edge->w);
@@ -78,7 +78,7 @@ bool Dijkstra::run()
                         foundInGraph->nodes.removeLast();
                     } else {
                         break;
-                    };
+                    }
                 }
             }
         }

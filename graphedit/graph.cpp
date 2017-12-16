@@ -2,10 +2,8 @@
 #include <algorithm>
 #include "graph.h"
 
-QVector<GraphEdge*> Graph::getLowestEdge(QVector<GraphEdge*> edges)
+GraphEdge* Graph::getLowestEdge(QVector<GraphEdge*> edges)
 {
-    // TODO: CHANGE
-    QVector<GraphEdge*> ret;
     GraphEdge* lowest = nullptr;
     for (GraphEdge* edge : edges) {
         if (!(edge->node1->existInTrees && edge->node2->existInTrees) &&
@@ -14,17 +12,11 @@ QVector<GraphEdge*> Graph::getLowestEdge(QVector<GraphEdge*> edges)
             lowest = edge;
         }
     }
-
-    if (lowest != nullptr) {
-        ret.append(lowest);
-    }
-    return ret;
+    return lowest;
 }
 
-QVector<GraphEdge*> Graph::getLowestEdge()
+GraphEdge* Graph::getLowestEdge()
 {
-    // TODO: CHANGE
-    QVector<GraphEdge*> ret;
     GraphEdge* lowest = nullptr;
     for (GraphEdge& edge : edges) {
         if (!(edge.node1->existInTrees && edge.node2->existInTrees) &&
@@ -33,11 +25,7 @@ QVector<GraphEdge*> Graph::getLowestEdge()
             lowest = &edge;
         }
     }
-
-    if (lowest != nullptr) {
-        ret.append(lowest);
-    }
-    return ret;
+    return lowest;
 }
 
 bool Graph::AddNode(float x, float y, int id)

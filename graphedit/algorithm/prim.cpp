@@ -6,7 +6,7 @@ bool Prim::run()
         return false;
     }
 
-    GraphEdge* firstEdge = gCopy.getLowestEdge()[0];
+    GraphEdge* firstEdge = gCopy.getLowestEdge();
     markEdge(firstEdge);
     states->append(gCopy);
 
@@ -19,8 +19,8 @@ bool Prim::run()
             if (!node.existInTrees)
                 continue;
 
-            for (GraphEdge* edge : gCopy.getLowestEdge(gCopy.GetIncidentEdges(&node)))
-            {
+            GraphEdge* edge = Graph::getLowestEdge(gCopy.GetIncidentEdges(&node));
+            if (edge != nullptr) {
                 if (edge->node1->existInTrees && edge->node2->existInTrees)
                     continue;
                 else if (lowestEdge == nullptr)

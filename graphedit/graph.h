@@ -56,8 +56,8 @@ struct Graph
     int GetNodeIndexByID(int);
     GraphEdge* getEdgeByNodePair(GraphNode* node1, GraphNode* node2);
     QVector<GraphEdge*> GetIncidentEdges(GraphNode* node);
-    QVector<GraphEdge*> getLowestEdge(QVector<GraphEdge*> edges);
-    QVector<GraphEdge*> getLowestEdge();
+    static GraphEdge* getLowestEdge(QVector<GraphEdge*> edges);
+    GraphEdge* getLowestEdge();
     GraphNode* GetNodeByID(int);
     void setBeginNode(GraphNode* node);
     void setEndNode(GraphNode* node);
