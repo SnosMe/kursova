@@ -23,6 +23,28 @@ FordFulkerson::FordFulkerson(QList<Graph> *states)
         }
     }
 
+    if (gCopy.end != &gCopy.nodes.last())
+    {
+        // swap actual [end] and [last]
+        GraphNode prevEnd = gCopy.nodes.last();
+        GraphNode mustBe = *gCopy.end;
+        GraphNode* ptr1 = gCopy.end;
+        GraphNode* ptr2 = &gCopy.nodes.last();
+        gCopy.nodes[getNodeIdx(gCopy.end)] = prevEnd;
+        gCopy.nodes[gCopy.nodes.length()-1] = mustBe;
+        for (GraphEdge& edge : gCopy.edges) {
+            if (edge.node1 == ptr1)
+                edge.node1 = ptr2;
+            else if (edge.node1 == ptr2)
+                edge.node1 = ptr1;
+            if (edge.node2 == ptr1)
+                edge.node2 = ptr2;
+            else if (edge.node2 == ptr2)
+                edge.node2 = ptr1;
+        }
+        gCopy.end = &gCopy.nodes.last();
+    }
+
     for (GraphEdge& edge : gCopy.edges)
     {
         capacity[getNodeIdx(edge.node1)][getNodeIdx(edge.node2)] = edge.w;

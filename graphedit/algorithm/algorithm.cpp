@@ -49,6 +49,7 @@ void Algorithm::showError(const QString &msg)
 bool Algorithm::isBeginEndConnected()
 {
     QList<GraphNode*> queue;
+    Graph savedState = gCopy;
 
     gCopy.begin->existInTrees = true;
     queue.append(gCopy.begin);
@@ -65,7 +66,7 @@ bool Algorithm::isBeginEndConnected()
 
                 if (node == gCopy.end) {
                     // restore graph
-                    gCopy = states->at(0);
+                    gCopy = savedState;
                     return true;
                 }
                 else if (!node->existInTrees)
@@ -77,7 +78,7 @@ bool Algorithm::isBeginEndConnected()
         }
 
     // restore graph
-    gCopy = states->at(0);
+    gCopy = savedState;
     return false;
 }
 
