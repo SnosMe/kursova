@@ -46,23 +46,28 @@ void GraphEdit::paintEvent(QPaintEvent*)
     //r = std::min(w, h)*0.1;
     r = std::min(w/viewport.width(), h/viewport.height())*0.2;
 
+    QColor black(33, 33, 33);
+    QColor white(255, 255, 255);
+    QColor red(255, 0, 0);
+    QColor green(0, 200, 83);
+
     for (int i = 0; i < g.edges.length(); i++)
     {
         if (&g.edges[i] == selectedEdge && mode == MODE_SELEDGE)
         {
-            p.setPen(QPen(QColor(255, 0, 0), 1.0));
+            p.setPen(QPen(red, 1.0));
         }
         else if (g.edges[i].color == ColorMode::GREEN)
         {
-            p.setPen(QPen(QColor(0, 200, 83), 3.0));
+            p.setPen(QPen(green, 3.0));
         }
         else if (g.edges[i].color == ColorMode::BOLD)
         {
-            p.setPen(QPen(QColor(33, 33, 33), 3.0));
+            p.setPen(QPen(black, 3.0));
         }
         else
         {
-            p.setPen(QPen(QColor(33, 33, 33), 1.0));
+            p.setPen(QPen(black, 1.0));
         }
 
         QPointF p1 = toScreenCoords(QPointF(g.edges[i].node1->x, g.edges[i].node1->y));
@@ -94,11 +99,11 @@ void GraphEdit::paintEvent(QPaintEvent*)
         } else {
             text = QString::number(g.edges[i].w);
         }
-        p.setPen(QPen(QColor(33, 33, 33), 1.0));
+        p.setPen(QPen(black, 1.0));
         p.drawText((p1+p2)/2.0, text);
     }
 
-    p.setPen(QPen(QColor(33, 33, 33)));
+    p.setPen(QPen(black));
 
     if (mode == MODE_NEWEDGE)
     {
@@ -108,35 +113,37 @@ void GraphEdit::paintEvent(QPaintEvent*)
 
     for (int i = 0; i < g.nodes.length(); i++)
     {
-        QPen textPan = QPen(QColor(33, 33, 33), 1.0);
+        QPen textPan = QPen(black, 1.0);
 
         if (&g.nodes[i] == selectedNode && mode == MODE_MOVE)
         {
             textPan = QPen(QColor(245, 245, 245), 1.0);
-            p.setBrush(QBrush(QColor(33, 33, 33)));
+            p.setBrush(QBrush(black));
         }
         else if (g.nodes[i].color == ColorMode::GREEN)
         {
-            p.setPen(QPen(QColor(0, 200, 83), 1.0)); // border color
-            p.setBrush(QBrush(QColor(0, 200, 83))); // inset color
+            p.setPen(QPen(green, 1.0)); // border color
+            p.setBrush(QBrush(green)); // inset color
         }
         else if (g.nodes[i].color == ColorMode::BOLD)
         {
-            p.setPen(QPen(QColor(33, 33, 33), 3.0));
-            p.setBrush(QBrush(QColor(255, 255, 255)));
+            p.setPen(QPen(black, 3.0));
+            p.setBrush(QBrush(white));
         }
         else
         {
             if (g.begin == &g.nodes[i] ||
                 g.end == &g.nodes[i])
             {
-                p.setPen(QPen(QColor(33, 33, 33), 2.0, Qt::DashDotDotLine));
+                p.setPen(QPen(QColor(14, 71, 161), 1.0));
+                p.setBrush(QBrush(QColor(144, 202, 249)));
+                textPan = QPen(QColor(14, 71, 161), 1.0);
             }
             else
             {
-                p.setPen(QPen(QColor(33, 33, 33), 1.0));
+                p.setPen(QPen(black, 1.0));
+                p.setBrush(QBrush(white));
             }
-            p.setBrush(QBrush(QColor(255, 255, 255)));
         }
 
         QPointF px = toScreenCoords(QPointF(g.nodes[i].x, g.nodes[i].y));
