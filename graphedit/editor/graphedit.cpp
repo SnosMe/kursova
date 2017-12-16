@@ -1,5 +1,3 @@
-#include <algorithm>
-#include <cmath>
 #include <QDebug>
 #include <QMouseEvent>
 #include <QtMath>
@@ -82,7 +80,7 @@ void GraphEdit::paintEvent(QPaintEvent*)
             QPointF v2;
             QPointF end = p2+v;
 
-            const qreal ANGLE = 0.393;
+            const qreal ANGLE = 0.22;
 
             v1.setX(v.x()*qCos(ANGLE)-v.y()*qSin(ANGLE));
             v1.setY(v.y()*qCos(ANGLE)+v.x()*qSin(ANGLE));
@@ -123,7 +121,7 @@ void GraphEdit::paintEvent(QPaintEvent*)
         else if (g.nodes[i].color == ColorMode::GREEN)
         {
             p.setPen(QPen(green, 1.0)); // border color
-            p.setBrush(QBrush(green)); // inset color
+            p.setBrush(QBrush(green));  // inset color
         }
         else if (g.nodes[i].color == ColorMode::BOLD)
         {

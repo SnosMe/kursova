@@ -1,5 +1,4 @@
 #include <QDebug>
-#include <algorithm>
 #include "graph.h"
 
 GraphEdge* Graph::getLowestEdge(QVector<GraphEdge*> edges)
