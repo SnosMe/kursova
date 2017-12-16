@@ -14,7 +14,7 @@
    <string>Властивості ребра</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="img.qrc">
+   <iconset resource="../img.qrc">
     <normaloff>:/img/app.ico</normaloff>:/img/app.ico</iconset>
   </property>
   <property name="styleSheet">
@@ -113,7 +113,7 @@ QSpinBox::down-button {
         <string>Видалити ребро</string>
        </property>
        <property name="icon">
-        <iconset resource="img.qrc">
+        <iconset resource="../img.qrc">
          <normaloff>:/img/trash.svg</normaloff>:/img/trash.svg</iconset>
        </property>
        <property name="iconSize">
@@ -208,7 +208,7 @@ font: 12pt &quot;Segoe UI&quot;;
   </layout>
  </widget>
  <resources>
-  <include location="img.qrc"/>
+  <include location="../img.qrc"/>
  </resources>
  <connections/>
 </ui>

@@ -2,7 +2,7 @@
 #define GRAPHNODEMENU_H
 
 #include <QDialog>
-#include "graph.h"
+#include "../graph.h"
 
 namespace Ui {
 class GraphNodeMenu;

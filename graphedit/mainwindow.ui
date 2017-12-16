@@ -1231,7 +1231,7 @@ font-size: 14px;
   <customwidget>
    <class>GraphEdit</class>
    <extends>QWidget</extends>
-   <header>graphedit.h</header>
+   <header>editor/graphedit.h</header>
    <container>1</container>
    <slots>
     <signal>edgeSelected(int)</signal>
@@ -1242,7 +1242,7 @@ font-size: 14px;
   <customwidget>
    <class>GraphBackground</class>
    <extends>QWidget</extends>
-   <header>graphbackground.h</header>
+   <header>editor/graphbackground.h</header>
   </customwidget>
  </customwidgets>
  <resources>

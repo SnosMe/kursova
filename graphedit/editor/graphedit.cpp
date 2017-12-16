@@ -3,7 +3,7 @@
 #include <QDebug>
 #include <QMouseEvent>
 #include <QtMath>
-#include "mainwindow.h"
+#include "../mainwindow.h"
 #include "graphedit.h"
 #include "graphnodemenu.h"
 #include "graphedgemenu.h"

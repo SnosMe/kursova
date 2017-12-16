@@ -4,7 +4,7 @@
 #include <QWidget>
 #include <QPainter>
 #include <QPoint>
-#include "graph.h"
+#include "../graph.h"
 
 enum EditorMode
 {

@@ -14,7 +14,7 @@
    <string>Властивості вершини</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="img.qrc">
+   <iconset resource="../img.qrc">
     <normaloff>:/img/app.ico</normaloff>:/img/app.ico</iconset>
   </property>
   <property name="styleSheet">
@@ -205,7 +205,7 @@ border-bottom-left-radius: 0;
         <string>Видалити вершину</string>
        </property>
        <property name="icon">
-        <iconset resource="img.qrc">
+        <iconset resource="../img.qrc">
          <normaloff>:/img/trash.svg</normaloff>:/img/trash.svg</iconset>
        </property>
        <property name="iconSize">
@@ -308,7 +308,7 @@ font: 12pt &quot;Segoe UI&quot;;
   <tabstop>btn_cancel</tabstop>
  </tabstops>
  <resources>
-  <include location="img.qrc"/>
+  <include location="../img.qrc"/>
  </resources>
  <connections/>
 </ui>

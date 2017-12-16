@@ -13,43 +13,43 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp \
-    graphedit.cpp \
+    mainwindow.cpp \
+    editor/graphedit.cpp \
     graph.cpp \
     io/graphwriter.cpp \
     io/graphreader.cpp \
-    graphbackground.cpp \
-	algorithm/fordfulkerson.cpp \
+    editor/graphbackground.cpp \
+	  algorithm/fordfulkerson.cpp \
     algorithm/prim.cpp \
-	algorithm/dijkstra.cpp \
+	  algorithm/dijkstra.cpp \
     about_dev.cpp \
     manual.cpp \
     algorithm/kruskal.cpp \
     algorithm/algorithm.cpp \
-    graphnodemenu.cpp \
-    graphedgemenu.cpp
+    editor/graphnodemenu.cpp \
+    editor/graphedgemenu.cpp
 
 HEADERS  += mainwindow.h \
-    graphedit.h \
+    editor/graphedit.h \
     graph.h \
     io/graphwriter.h \
     io/graphreader.h \
-    graphbackground.h \
-	algorithm/dijkstra.h \
-	algorithm/fordfulkerson.h \
+    editor/graphbackground.h \
+	  algorithm/dijkstra.h \
+	  algorithm/fordfulkerson.h \
     algorithm/algorithm.h \
     algorithm/prim.h \
     about_dev.h \
     manual.h \
     algorithm/kruskal.h \
-    graphnodemenu.h \
-    graphedgemenu.h
+    editor/graphnodemenu.h \
+    editor/graphedgemenu.h
 
 FORMS    += mainwindow.ui \
     about_dev.ui \
     manual.ui \
-    graphnodemenu.ui \
-    graphedgemenu.ui
+    editor/graphnodemenu.ui \
+    editor/graphedgemenu.ui
 
 RESOURCES += \
     img.qrc

@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include <QVector>
-#include "graphedit.h"
+#include "editor/graphedit.h"
 #include "manual.h"
 #include "about_dev.h"
 
