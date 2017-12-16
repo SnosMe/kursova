@@ -208,10 +208,25 @@ void Graph::colorGreenToBold()
     }
 }
 
-void Graph::printNodes()
+Graph& Graph::operator=(const Graph &src)
 {
-    for (int i = 0; i < nodes.length(); i++)
-    {
-        qDebug().nospace() << "id=" << nodes[i].id << " (" << nodes[i].x << ", " << nodes[i].y << ") " << &nodes[i];
+    qDebug() << "Graph::operator=";
+    nodes = src.nodes;
+    edges = src.edges;
+    directed = src.directed;
+
+    begin = (src.begin != nullptr) ? GetNodeByID(src.begin->id) : nullptr;
+    end = (src.end != nullptr) ? GetNodeByID(src.end->id) : nullptr;
+
+    for (auto& edge : edges) {
+        edge.node1 = GetNodeByID(edge.node1->id);
+        edge.node2 = GetNodeByID(edge.node2->id);
     }
+
+    return *this;
+}
+
+bool GraphEdge::lessThan(const GraphEdge *e1, const GraphEdge *e2)
+{
+    return e1->w < e2->w;
 }
