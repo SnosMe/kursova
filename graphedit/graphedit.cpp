@@ -5,6 +5,8 @@
 #include <QtMath>
 #include "mainwindow.h"
 #include "graphedit.h"
+#include "graphnodemenu.h"
+#include "graphedgemenu.h"
 
 //const float LINE_WIDTH = 0.05;
 
@@ -269,11 +271,10 @@ void GraphEdit::mouseReleaseEvent(QMouseEvent* e)
             }
             else if (mode == MODE_SELEDGE)
             {
-                g.RemoveEdge(selectedEdge);
-                emit edgeSelectionLoss();
-                selectedEdge = nullptr;
-                mode = MODE_NONE;
-            } else {
+                openEdgeDialog(selectedEdge);
+            }
+            else
+            {
                 int x = e->x();
                 int y = e->y();
 
@@ -572,6 +573,30 @@ void GraphEdit::openNodeDialog(GraphNode* node)
         {
             selectedNode = nullptr;
             emit nodeSelectionLoss();
+            mode = MODE_NONE;
+        }
+        update();
+    }
+}
+
+void GraphEdit::openEdgeDialog(GraphEdge* edge)
+{
+    GraphEdgeMenu dialog(this);
+    dialog.initEdge(edge->w);
+    int result = dialog.exec();
+
+    if (result == 1)
+    {
+        edge->w = dialog.getWeight();
+        update();
+    }
+    else if (result == 2)
+    {
+        g.RemoveEdge(selectedEdge);
+        if (edge == selectedEdge)
+        {
+            selectedEdge = nullptr;
+            emit edgeSelectionLoss();
             mode = MODE_NONE;
         }
         update();

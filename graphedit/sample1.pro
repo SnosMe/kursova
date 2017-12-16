@@ -26,7 +26,8 @@ SOURCES += main.cpp\
     manual.cpp \
     algorithm/kruskal.cpp \
     algorithm/algorithm.cpp \
-    graphnodemenu.cpp
+    graphnodemenu.cpp \
+    graphedgemenu.cpp
 
 HEADERS  += mainwindow.h \
     graphedit.h \
@@ -41,12 +42,14 @@ HEADERS  += mainwindow.h \
     about_dev.h \
     manual.h \
     algorithm/kruskal.h \
-    graphnodemenu.h
+    graphnodemenu.h \
+    graphedgemenu.h
 
 FORMS    += mainwindow.ui \
     about_dev.ui \
     manual.ui \
-    graphnodemenu.ui
+    graphnodemenu.ui \
+    graphedgemenu.ui
 
 RESOURCES += \
     img.qrc

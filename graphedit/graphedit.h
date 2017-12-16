@@ -5,7 +5,6 @@
 #include <QPainter>
 #include <QPoint>
 #include "graph.h"
-#include "graphnodemenu.h"
 
 enum EditorMode
 {
@@ -53,6 +52,7 @@ private:
     QRectF              viewport;
     QPointF             old_vp_pos;
     void openNodeDialog(GraphNode* node);
+    void openEdgeDialog(GraphEdge* edge);
 
 protected:
     GraphNode* getNodeAt(int x, int y);
