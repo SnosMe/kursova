@@ -14,7 +14,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->btn_deleteBgImage->hide();
 
     connect(this->ui->btn_bgImage, SIGNAL(clicked()), this->ui->graphBg, SLOT(changeBackground()));
     connect(this->ui->btn_deleteBgImage, SIGNAL(clicked()), this->ui->graphBg, SLOT(deleteBackground()));
@@ -292,14 +291,9 @@ void MainWindow::on_showDevs_triggered()
 
 void MainWindow::on_graphBg_backgroundChanged(bool isActive)
 {
-    if (isActive)
-    {
-        ui->btn_bgImage->hide();
-        ui->btn_deleteBgImage->show();
-    }
-    else
-    {
-        ui->btn_deleteBgImage->hide();
-        ui->btn_bgImage->show();
+    if (isActive) {
+        ui->bgImgControls->setCurrentWidget(ui->page_delBgImage);
+    } else {
+        ui->bgImgControls->setCurrentWidget(ui->page_bgImage);
     }
 }
