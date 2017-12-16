@@ -510,22 +510,6 @@ void GraphEdit::clearInternalState()
     emit nodeSelectionLoss();
 }
 
-void GraphEdit::setSelectedObjectText(const QString& str)
-{
-    if (selectedEdge != nullptr)
-    {
-        int w = str.toInt();
-        if (w > 0) {
-            selectedEdge->w = w;
-            update();
-        }
-    }
-    else if (selectedNode != nullptr) {
-        selectedNode->name = str;
-        update();
-    }
-}
-
 void GraphEdit::setIsDirectedGraph(int state)
 {
     g.directed = (state == Qt::Checked);

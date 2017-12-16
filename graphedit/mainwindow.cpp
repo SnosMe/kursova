@@ -17,7 +17,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(this->ui->btn_bgImage, SIGNAL(clicked()), this->ui->graphBg, SLOT(changeBackground()));
     connect(this->ui->btn_deleteBgImage, SIGNAL(clicked()), this->ui->graphBg, SLOT(deleteBackground()));
-    connect(this->ui->lineEdit, SIGNAL(textEdited(QString)), this->ui->widget, SLOT(setSelectedObjectText(QString)));
     connect(this->ui->directedGraph, SIGNAL(stateChanged(int)), this->ui->widget, SLOT(setIsDirectedGraph(int)));
 
     helpWindow = new Manual();
@@ -45,42 +44,6 @@ void MainWindow::setDirectedGraph(bool directed)
 {
     ui->directedGraph->setChecked(directed);
     ui->widget->GetGraph().directed = directed;
-}
-
-void MainWindow::on_widget_edgeSelected(GraphEdge* edge)
-{
-    ui->lineEdit->setText(QString::number(edge->w));
-    ui->lineEdit->setEnabled(true);
-    ui->lineEdit->setFocus();
-    ui->lineEdit->selectAll();
-}
-
-void MainWindow::on_widget_nodeSelected(GraphNode* node)
-{
-    ui->lineEdit->setText(node->name);
-    ui->lineEdit->setEnabled(true);
-    ui->lineEdit->setFocus();
-    ui->lineEdit->selectAll();
-
-    ui->btn_markBegin->setEnabled(true);
-    ui->btn_markEnd->setEnabled(true);
-    updateBeginEndBtnsState();
-}
-
-void MainWindow::on_widget_edgeSelectionLoss()
-{
-    ui->lineEdit->setEnabled(false);
-    ui->lineEdit->clear();
-}
-
-void MainWindow::on_widget_nodeSelectionLoss()
-{
-    // lineEdit is common for edge and node
-    on_widget_edgeSelectionLoss();
-
-    ui->btn_markBegin->setEnabled(false);
-    ui->btn_markEnd->setEnabled(false);
-    updateBeginEndBtnsState();
 }
 
 void MainWindow::on_btn_firstState_clicked()
@@ -169,45 +132,6 @@ void MainWindow::on_openFromFile_triggered()
         setDirectedGraph(ui->widget->GetGraph().directed);
 
         file.close();
-    }
-}
-
-void MainWindow::on_btn_markBegin_clicked()
-{
-    ui->widget->GetGraph().setBeginNode(ui->widget->selectedNode);
-    updateBeginEndBtnsState();
-}
-
-void MainWindow::on_btn_markEnd_clicked()
-{
-    ui->widget->GetGraph().setEndNode(ui->widget->selectedNode);
-    updateBeginEndBtnsState();
-}
-
-void MainWindow::updateBeginEndBtnsState()
-{
-    if (ui->widget->selectedNode == nullptr)
-    {
-        ui->btn_markBegin->setChecked(false);
-        ui->btn_markEnd->setChecked(false);
-    }
-    else
-    {
-        if (ui->widget->GetGraph().begin == ui->widget->selectedNode)
-        {
-            ui->btn_markBegin->setChecked(true);
-            ui->btn_markEnd->setChecked(false);
-        }
-        else if (ui->widget->GetGraph().end == ui->widget->selectedNode)
-        {
-            ui->btn_markBegin->setChecked(false);
-            ui->btn_markEnd->setChecked(true);
-        }
-        else
-        {
-            ui->btn_markBegin->setChecked(false);
-            ui->btn_markEnd->setChecked(false);
-        }
     }
 }
 

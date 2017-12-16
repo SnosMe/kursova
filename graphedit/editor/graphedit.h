@@ -30,7 +30,6 @@ public:
     void clearInternalState();
 
 public slots:
-    void setSelectedObjectText(const QString& str);
     void setIsDirectedGraph(int state);
 
 signals:

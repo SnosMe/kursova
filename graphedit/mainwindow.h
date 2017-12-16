@@ -23,11 +23,6 @@ public:
     void setDirectedGraph(bool);
 
 private slots:
-    void on_widget_edgeSelected(GraphEdge*);
-    void on_widget_edgeSelectionLoss();
-    void on_widget_nodeSelected(GraphNode*);
-    void on_widget_nodeSelectionLoss();
-
     void on_btn_firstState_clicked();
     void on_btn_prevState_clicked();
     void on_btn_nextState_clicked();
@@ -39,9 +34,6 @@ private slots:
 
     void on_saveToFile_triggered();
     void on_openFromFile_triggered();
-
-    void on_btn_markBegin_clicked();
-    void on_btn_markEnd_clicked();
 
     void on_btn_primAlgo_clicked();
     void on_btn_kruskalAlgo_clicked();
@@ -57,7 +49,6 @@ private:
     About_Dev* devsWindow;
     QList<Graph> states;
     int stateIdx;
-    void updateBeginEndBtnsState();
     void beforeAlgorithm();
     void afterAlgorithm();
     void updateState();
