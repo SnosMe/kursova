@@ -265,10 +265,7 @@ void GraphEdit::mouseReleaseEvent(QMouseEvent* e)
         {
             if (mode == MODE_MOVE)
             {
-                g.RemoveNode(selectedNode);
-                selectedNode = nullptr;
-                emit nodeSelectionLoss();
-                mode = MODE_NONE;
+                openNodeDialog(selectedNode);
             }
             else if (mode == MODE_SELEDGE)
             {
@@ -282,7 +279,7 @@ void GraphEdit::mouseReleaseEvent(QMouseEvent* e)
 
                 GraphNode* node = getNodeAt(x, y);
                 if (node != nullptr) {
-                    g.RemoveNode(selectedNode);
+                    openNodeDialog(node);
                 }
             }
 
@@ -317,15 +314,14 @@ void GraphEdit::mouseMoveEvent(QMouseEvent* e)
     {
         if (selectedNode != nullptr)
         {
-            float w, h;
             QSize sz = this->size();
 
-            w = sz.width();
-            h = sz.height();
+            float w = sz.width();
+            float h = sz.height();
             int x = e->x();
             int y = e->y();
 
-            if (x >= 0 && x <= w && y >= 0 && y <= w)
+            if (x >= 0 && x <= w && y >= 0 && y <= h)
             {
                 QPointF p = toInternalCoords(QPointF(x, y));
 
@@ -457,12 +453,6 @@ GraphNode* GraphEdit::getNodeAt(int x, int y)
 
 GraphEdge* GraphEdit::getEdgeAt(int x, int y)
 {
-    float w, h;
-    QSize sz = this->size();
-
-    w = sz.width();
-    h = sz.height();
-
     QPointF p = toInternalCoords(QPointF(x,y));
 
     float rx = p.x();
@@ -557,6 +547,35 @@ void GraphEdit::setIsDirectedGraph(int state)
 {
     g.directed = (state == Qt::Checked);
     update();
+}
+
+void GraphEdit::openNodeDialog(GraphNode* node)
+{
+    GraphNodeMenu dialog(this);
+    dialog.initNode(node->name, node == g.begin, node == g.end);
+    int result = dialog.exec();
+
+    if (result == 1)
+    {
+        node->name = dialog.getName();
+        if (dialog.isBegin()) {
+            g.setBeginNode(node);
+        } else if (dialog.isEnd()) {
+            g.setEndNode(node);
+        }
+        update();
+    }
+    else if (result == 2)
+    {
+        g.RemoveNode(node);
+        if (node == selectedNode)
+        {
+            selectedNode = nullptr;
+            emit nodeSelectionLoss();
+            mode = MODE_NONE;
+        }
+        update();
+    }
 }
 
 QPointF GraphEdit::toScreenCoords(QPointF pos)
