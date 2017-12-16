@@ -8,6 +8,7 @@
         <file>img/step-next.png</file>
         <file>img/step-prev.png</file>
         <file>img/app.ico</file>
+        <file>img/trash.svg</file>
     </qresource>
     <qresource prefix="/manual">
         <file>img/manual/graph_fone.png</file>
